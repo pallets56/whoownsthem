@@ -12,7 +12,23 @@ body { background: var(--white); color: var(--black); font-family: 'Karla', sans
 header { background: var(--black); color: var(--white); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--red); position: sticky; top: 0; z-index: 100; height: 52px; }
 .header-brand { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; color: var(--white); text-decoration: none; }
 .header-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--red); text-transform: uppercase; }
-.hero { background: var(--black); color: var(--white); padding: 52px 24px 48px; text-align: center; }
+.hero {
+  background: var(--black);
+  color: var(--white);
+  padding: 52px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1486299267070-83823f5448dd?q=80&w=2342&auto=format&fit=crop') center/cover no-repeat;
+  opacity: 0.18;
+  z-index: 0;
+}
+.hero > * { position: relative; z-index: 1; }
 .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--red); text-transform: uppercase; margin-bottom: 16px; }
 .hero h1 { font-size: clamp(36px, 7vw, 72px); font-weight: 800; line-height: 1.0; margin-bottom: 20px; letter-spacing: -0.02em; }
 .hero h1 span { color: var(--yellow); }
@@ -39,6 +55,10 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 .status { text-align: center; padding: 60px 24px; color: var(--mid); font-size: 16px; }
 .status-error { color: var(--red) !important; font-weight: 700; }
 .mp-header { padding: 40px 0 24px; border-bottom: 3px solid var(--black); margin-bottom: 32px; }
+.mp-header-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.mp-header-text { flex: 1; }
+.mp-photo-wrap { flex: 0 0 80px; }
+.mp-photo { width: 80px; height: 80px; object-fit: cover; object-position: top; border-radius: 6px; border: 2px solid var(--black); display: block; }
 .mp-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; font-weight: 700; }
 .mp-name { font-size: clamp(28px, 5vw, 48px); font-weight: 800; line-height: 1.1; margin-bottom: 8px; letter-spacing: -0.02em; }
 .mp-meta { font-size: 14px; color: var(--mid); font-family: 'Space Mono', monospace; }
@@ -178,7 +198,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 <div class="hero">
   <p class="hero-eyebrow">Everyone Hates Elon</p>
   <h1>Find out who <span>owns</span> your MP</h1>
-  <p class="hero-sub">MPs are legally required to declare who pays them, who donates to them, and what gifts they accept. We made it searchable.</p>
+  <p class="hero-sub">Every gift, every donor, every second job. Find out who's bankrolling your MP.</p>
 
   <div class="search-wrap">
     <div class="search-box" style="border-radius:8px">
@@ -351,45 +371,26 @@ function doPostcodeLookup(val) {
       if (!pcData.result) { throw new Error('That postcode does not look right. Please try again.'); }
       var constituency = pcData.result.parliamentary_constituency_2024 || pcData.result.parliamentary_constituency;
       if (!constituency) { throw new Error('Could not find a constituency for that postcode.'); }
-
-      // Search for constituency, then get its current MP
-      return fetch('https://members-api.parliament.uk/api/Location/Constituency/Search?searchText=' + encodeURIComponent(constituency) + '&skip=0&take=5')
+      return fetch('https://members-api.parliament.uk/api/Members/Search?constituency=' + encodeURIComponent(constituency) + '&IsCurrentMember=true&skip=0&take=1')
         .then(function(r) { return r.json(); })
-        .then(function(cData) {
-          var items = cData.items || [];
-          // Find exact or closest constituency match
-          var cItem = null;
-          for (var i = 0; i < items.length; i++) {
-            if (items[i].value && items[i].value.name && items[i].value.name.toLowerCase() === constituency.toLowerCase()) {
-              cItem = items[i]; break;
-            }
-          }
-          if (!cItem && items.length) cItem = items[0];
-          if (!cItem) { throw new Error('Could not find constituency: ' + constituency); }
-          var cId = cItem.value.id;
-          var cName = cItem.value.name;
-          // Get the current MP for this constituency
-          return fetch('https://members-api.parliament.uk/api/Location/Constituency/' + cId + '/Representatives?currentOnly=true')
-            .then(function(r) { return r.json(); })
-            .then(function(repData) {
-              var reps = repData.value || repData.items || [];
-              if (!reps.length) { throw new Error('No current MP found for ' + cName); }
-              var mpName = reps[0].value ? reps[0].value.nameDisplayAs : reps[0].nameDisplayAs;
-              return { mpName: mpName, constituency: cName };
-            });
+        .then(function(mpJson) {
+          var members = mpJson.items || [];
+          if (!members.length) { throw new Error('No current MP found for ' + constituency + '.'); }
+          return { mpName: members[0].value.nameDisplayAs, constituency: constituency };
         });
     })
     .then(function(res) {
       var mpName = res.mpName;
       var constituency = res.constituency;
-      var lower = mpName.toLowerCase();
+      var stripped = mpName.replace(/^(Sir|Dame|Dr|Mr|Mrs|Ms|Miss|Lord|Lady)\s+/i, '').toLowerCase();
       var match = null;
 
       for (var i = 0; i < allNames.length; i++) {
-        if (allNames[i].toLowerCase() === lower) { match = allNames[i]; break; }
+        var ns = allNames[i].replace(/^(Sir|Dame|Dr|Mr|Mrs|Ms|Miss|Lord|Lady)\s+/i, '').toLowerCase();
+        if (ns === stripped || allNames[i].toLowerCase() === mpName.toLowerCase()) { match = allNames[i]; break; }
       }
       if (!match) {
-        var lastName = mpName.split(' ').pop().toLowerCase();
+        var lastName = stripped.split(' ').pop();
         if (lastName.length > 3) {
           for (var i = 0; i < allNames.length; i++) {
             if (allNames[i].toLowerCase().indexOf(lastName) !== -1) { match = allNames[i]; break; }
@@ -397,14 +398,10 @@ function doPostcodeLookup(val) {
         }
       }
       if (!match) {
-        var parts = mpName.toLowerCase().split(' ').filter(function(p) { return p.length > 2; });
+        var parts = stripped.split(' ').filter(function(p) { return p.length > 2; });
         for (var i = 0; i < allNames.length; i++) {
           var nl = allNames[i].toLowerCase();
-          var allMatch = true;
-          for (var j = 0; j < parts.length; j++) {
-            if (nl.indexOf(parts[j]) === -1) { allMatch = false; break; }
-          }
-          if (allMatch) { match = allNames[i]; break; }
+          if (parts.every(function(p) { return nl.indexOf(p) !== -1; })) { match = allNames[i]; break; }
         }
       }
 
@@ -417,23 +414,19 @@ function doPostcodeLookup(val) {
           '<h2 class="mp-name">' + esc(mpName) + '</h2>' +
           '<p class="mp-meta">March 2026</p>' +
           '</div>' +
-          '<div class="status">' + esc(mpName) + ' has no entries in the current register. They may be newly elected or have nothing to declare.</div>'
+          '<div class="status">' + esc(mpName) + ' has no entries in the current register.</div>'
         );
       }
     })
     .catch(function(err) {
-      var msg = err.message || '';
-      if (msg.indexOf('fetch') !== -1 || msg.indexOf('Failed') !== -1 || msg.indexOf('NetworkError') !== -1) {
-        showError('Postcode lookup needs an internet connection and is not available in preview. Try searching by your MP\'s name instead.');
-      } else {
-        showError(msg || 'Could not look up that postcode. Try searching by name instead.');
-      }
+      showError(err.message || 'Could not look up that postcode. Try searching by your MP\'s name instead.');
     })
     .finally(function() {
       btn.disabled = false;
       btn.textContent = 'Search';
     });
 }
+
 
 function showMP(name, constituency) {
   var mp = MP_DATA[name];
@@ -447,12 +440,42 @@ function showMP(name, constituency) {
 
   var out = [];
 
-  // Header
-  out.push('<div class="mp-header">');
+  // Header - render immediately, then enrich with API data
+  var headerId = 'mp-header-' + Date.now();
+  out.push('<div class="mp-header" id="' + headerId + '">');
+  out.push('<div class="mp-header-inner">');
+  out.push('<div class="mp-header-text">');
   out.push('<p class="mp-label">Your MP' + (constituency ? ' &mdash; ' + esc(constituency) : '') + '</p>');
   out.push('<h2 class="mp-name">' + esc(name) + '</h2>');
-  out.push('<p class="mp-meta">March 2026</p>');
+  out.push('<p class="mp-meta" id="mp-tenure-' + headerId + '">March 2026</p>');
   out.push('</div>');
+  out.push('<div class="mp-photo-wrap" id="mp-photo-' + headerId + '"></div>');
+  out.push('</div>');
+  out.push('</div>');
+
+  // Fetch MP photo and tenure from Parliament API
+  fetch('https://members-api.parliament.uk/api/Members/Search?name=' + encodeURIComponent(name.replace(/^(Sir|Dame|Dr|Mr|Mrs|Ms|Miss)\s+/i,'')) + '&IsCurrentMember=true&skip=0&take=1')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var members = data.items || [];
+      if (!members.length) return;
+      var m = members[0].value;
+      var photoEl = document.getElementById('mp-photo-' + headerId);
+      var tenureEl = document.getElementById('mp-tenure-' + headerId);
+      if (m.thumbnailUrl && photoEl) {
+        photoEl.innerHTML = '<img src="' + m.thumbnailUrl + '" alt="' + esc(name) + '" class="mp-photo">';
+      }
+      if (tenureEl) {
+        var since = '';
+        if (m.latestHouseMembership && m.latestHouseMembership.membershipStartDate) {
+          var d = new Date(m.latestHouseMembership.membershipStartDate);
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          since = 'MP since ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        }
+        tenureEl.textContent = since || 'March 2026';
+      }
+    })
+    .catch(function() {});
 
   // Extract £ values from employment summaries (e.g. Farage's payment entries)
   var totalEmploymentExtracted = 0;
