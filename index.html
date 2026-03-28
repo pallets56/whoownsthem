@@ -454,11 +454,20 @@ function showMP(name, constituency) {
   out.push('<p class="mp-meta">March 2026</p>');
   out.push('</div>');
 
+  // Extract £ values from employment summaries (e.g. Farage's payment entries)
+  var totalEmploymentExtracted = 0;
+  mp.employment.forEach(function(e) {
+    var m = (e.summary || '').match(/£([\d,]+\.?\d*)/);
+    if (m) totalEmploymentExtracted += parseFloat(m[1].replace(/,/g,''));
+  });
+  var totalOverall = totalDonations + totalGifts + totalEmploymentExtracted;
+
   // Stats
   out.push('<div class="stat-row">');
-  out.push('<div class="stat-pill"><div class="num highlight">' + fmt(totalDonations) + '</div><div class="lbl">Donations declared</div></div>');
-  out.push('<div class="stat-pill"><div class="num">' + mp.employment.length + '</div><div class="lbl">Outside earnings (pay undisclosed)</div></div>');
-  out.push('<div class="stat-pill"><div class="num highlight">' + fmt(totalGifts) + '</div><div class="lbl">Gifts &amp; hospitality value</div></div>');
+  out.push('<div class="stat-pill"><div class="num highlight">' + (totalOverall > 0 ? fmt(totalOverall) : '—') + '</div><div class="lbl">Total declared value</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + fmt(totalDonations) + '</div><div class="lbl">Donations</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + fmt(totalGifts) + '</div><div class="lbl">Gifts &amp; hospitality</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + (totalEmploymentExtracted > 0 ? fmt(totalEmploymentExtracted) : mp.employment.length + ' jobs') + '</div><div class="lbl">Outside earnings</div></div>');
   out.push('</div>');
 
   // Donations section
@@ -502,15 +511,28 @@ function showMP(name, constituency) {
 
   // Employment section
   out.push('<div class="section">');
-  out.push('<div class="section-header"><span class="section-title">Outside employment &amp; earnings</span><span class="section-count">' + mp.employment.length + '</span></div>');
+  out.push('<div class="section-header"><span class="section-title">Who else is paying them</span><span class="section-count">' + mp.employment.length + '</span></div>');
   if (!mp.employment.length) {
     out.push('<p class="empty-section">No outside employment declared.</p>');
   } else {
     mp.employment.forEach(function(e) {
+      var extractedVal = 0;
+      var valMatch = (e.summary || '').match(/£([\d,]+\.?\d*)/);
+      if (valMatch) extractedVal = parseFloat(valMatch[1].replace(/,/g,''));
+      var displayName = e.payer || e.summary || '';
+      var detail = e.job || '';
+      // If it's a payment entry with no payer, use summary as the main line
+      if (!e.payer && valMatch) {
+        displayName = e.summary;
+        detail = '';
+      }
       out.push('<div class="entry">');
-      out.push('<div class="entry-main"><div class="entry-who">' + esc(e.payer || e.summary || '') + '</div>');
-      out.push('<div class="entry-detail">' + esc(e.job || '') + '</div></div>');
-      out.push('<div><div class="entry-date">' + fmtDate(e.registered) + '</div></div>');
+      out.push('<div class="entry-main"><div class="entry-who">' + esc(displayName) + '</div>');
+      out.push('<div class="entry-detail">' + esc(detail) + '</div></div>');
+      out.push('<div>');
+      if (extractedVal > 0) out.push('<div class="entry-value">' + fmt(extractedVal) + '</div>');
+      out.push('<div class="entry-date">' + fmtDate(e.registered) + '</div>');
+      out.push('</div>');
       out.push('</div>');
     });
   }
