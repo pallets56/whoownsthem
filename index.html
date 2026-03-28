@@ -465,8 +465,8 @@ function showMP(name, constituency) {
   // Stats
   out.push('<div class="stat-row">');
   out.push('<div class="stat-pill"><div class="num highlight">' + (totalOverall > 0 ? fmt(totalOverall) : '—') + '</div><div class="lbl">Total declared value</div></div>');
-  out.push('<div class="stat-pill"><div class="num">' + fmt(totalDonations) + '</div><div class="lbl">Donations</div></div>');
-  out.push('<div class="stat-pill"><div class="num">' + fmt(totalGifts) + '</div><div class="lbl">Gifts &amp; hospitality</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + (totalDonations > 0 ? fmt(totalDonations) : '£0') + '</div><div class="lbl">Donations</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + (totalGifts > 0 ? fmt(totalGifts) : '£0') + '</div><div class="lbl">Gifts &amp; hospitality</div></div>');
   out.push('<div class="stat-pill"><div class="num">' + (totalEmploymentExtracted > 0 ? fmt(totalEmploymentExtracted) : mp.employment.length + ' jobs') + '</div><div class="lbl">Outside earnings</div></div>');
   out.push('</div>');
 
