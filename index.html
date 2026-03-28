@@ -226,7 +226,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 <footer class="ehe-footer">
   <div class="logo">Everyone Hates Elon</div>
   <div class="strapline">Billionaires own the politicians.<br>Now you can see who owns yours.</div>
-  <p>Data: <a href="https://interests-api.parliament.uk" target="_blank">Parliament's Register of Members' Financial Interests</a> &mdash; March 2026</p>
+  <p>Data: <a href="https://interests-api.parliament.uk" target="_blank">Parliament's Register of Members' Financial Interests</a> &mdash; updated weekly</p>
   <p style="margin-top:12px"><a href="https://www.instagram.com/everyonehateselon_/" target="_blank">@everyonehateselon_</a></p>
 </footer>
 
@@ -414,7 +414,7 @@ function doPostcodeLookup(val) {
           '<h2 class="mp-name">' + esc(mpName) + '</h2>' +
           '<p class="mp-meta">March 2026</p>' +
           '</div>' +
-          '<div class="status">' + esc(mpName) + ' has no entries in the current register.</div>'
+          '<div class="status">' + esc(mpName) + ' has no declared interests on record.</div>'
         );
       }
     })
@@ -498,7 +498,7 @@ function showMP(name, constituency) {
   out.push('<div class="section">');
   out.push('<div class="section-header"><span class="section-title">Donations received</span><span class="section-count">' + donations.length + '</span></div>');
   if (!donations.length) {
-    out.push('<p class="empty-section">No donations declared in the current register.</p>');
+    out.push('<p class="empty-section">No donations declared.</p>');
   } else {
     donations.forEach(function(d, di) {
       var donor = d.donor || 'Unknown donor';
@@ -618,7 +618,7 @@ function showMP(name, constituency) {
   out.push('<button class="share-btn" id="btnShareX">Share on X</button>');
   out.push('<button class="share-btn" id="btnCopy">Copy link</button>');
   out.push('</div></div>');
-  out.push('<p class="source-note">Data from the <a href="https://interests-api.parliament.uk" target="_blank">official Register of Members\' Financial Interests</a>. March 2026. Covers registered interests only &mdash; not Electoral Commission party donation records.</p>');
+  out.push('<p class="source-note">Data from the <a href="https://interests-api.parliament.uk" target="_blank">official Register of Members\' Financial Interests</a>. Data covers 2000 to present. Registered interests only &mdash; not Electoral Commission party donation records.</p>');
 
   setResults(out.join(''));
 
