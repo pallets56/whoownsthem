@@ -352,12 +352,31 @@ function doPostcodeLookup(val) {
       var constituency = pcData.result.parliamentary_constituency_2024 || pcData.result.parliamentary_constituency;
       if (!constituency) { throw new Error('Could not find a constituency for that postcode.'); }
 
-      return fetch('https://members-api.parliament.uk/api/Members/Search?constituency=' + encodeURIComponent(constituency) + '&IsCurrentMember=true')
+      // Search for constituency, then get its current MP
+      return fetch('https://members-api.parliament.uk/api/Location/Constituency/Search?searchText=' + encodeURIComponent(constituency) + '&skip=0&take=5')
         .then(function(r) { return r.json(); })
-        .then(function(mpJson) {
-          var members = mpJson.items || [];
-          if (!members.length) { throw new Error('No current MP found for ' + constituency + '.'); }
-          return { mpName: members[0].value.nameDisplayAs, constituency: constituency };
+        .then(function(cData) {
+          var items = cData.items || [];
+          // Find exact or closest constituency match
+          var cItem = null;
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].value && items[i].value.name && items[i].value.name.toLowerCase() === constituency.toLowerCase()) {
+              cItem = items[i]; break;
+            }
+          }
+          if (!cItem && items.length) cItem = items[0];
+          if (!cItem) { throw new Error('Could not find constituency: ' + constituency); }
+          var cId = cItem.value.id;
+          var cName = cItem.value.name;
+          // Get the current MP for this constituency
+          return fetch('https://members-api.parliament.uk/api/Location/Constituency/' + cId + '/Representatives?currentOnly=true')
+            .then(function(r) { return r.json(); })
+            .then(function(repData) {
+              var reps = repData.value || repData.items || [];
+              if (!reps.length) { throw new Error('No current MP found for ' + cName); }
+              var mpName = reps[0].value ? reps[0].value.nameDisplayAs : reps[0].nameDisplayAs;
+              return { mpName: mpName, constituency: cName };
+            });
         });
     })
     .then(function(res) {
