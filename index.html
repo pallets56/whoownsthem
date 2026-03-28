@@ -365,23 +365,15 @@ function doPostcodeLookup(val) {
 
   var postcode = val.replace(/\s+/g, '').toUpperCase();
 
-  fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(postcode))
+  // Use TheyWorkForYou API - most reliable postcode->MP lookup
+  fetch('https://www.theyworkforyou.com/api/getMP?postcode=' + encodeURIComponent(postcode) + '&output=js')
     .then(function(r) { return r.json(); })
-    .then(function(pcData) {
-      if (!pcData.result) { throw new Error('That postcode does not look right. Please try again.'); }
-      var constituency = pcData.result.parliamentary_constituency_2024 || pcData.result.parliamentary_constituency;
-      if (!constituency) { throw new Error('Could not find a constituency for that postcode.'); }
-      return fetch('https://members-api.parliament.uk/api/Members/Search?constituency=' + encodeURIComponent(constituency) + '&IsCurrentMember=true&skip=0&take=1')
-        .then(function(r) { return r.json(); })
-        .then(function(mpJson) {
-          var members = mpJson.items || [];
-          if (!members.length) { throw new Error('No current MP found for ' + constituency + '.'); }
-          return { mpName: members[0].value.nameDisplayAs, constituency: constituency };
-        });
-    })
-    .then(function(res) {
-      var mpName = res.mpName;
-      var constituency = res.constituency;
+    .then(function(data) {
+      if (data.error) { throw new Error('Could not find an MP for that postcode. Please check it and try again.'); }
+      var mpName = data.full_name;
+      var constituency = data.constituency;
+      if (!mpName) { throw new Error('No MP found for that postcode.'); }
+
       var stripped = mpName.replace(/^(Sir|Dame|Dr|Mr|Mrs|Ms|Miss|Lord|Lady)\s+/i, '').toLowerCase();
       var match = null;
 
@@ -412,7 +404,7 @@ function doPostcodeLookup(val) {
           '<div class="mp-header">' +
           '<p class="mp-label">Your MP &mdash; ' + esc(constituency) + '</p>' +
           '<h2 class="mp-name">' + esc(mpName) + '</h2>' +
-          '<p class="mp-meta">March 2026</p>' +
+          '<p class="mp-meta"></p>' +
           '</div>' +
           '<div class="status">' + esc(mpName) + ' has no declared interests on record.</div>'
         );
