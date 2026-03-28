@@ -456,10 +456,9 @@ function showMP(name, constituency) {
 
   // Stats
   out.push('<div class="stat-row">');
-  out.push('<div class="stat-pill"><div class="num highlight">' + (totalAll > 0 ? fmt(totalAll) : '&pound;0') + '</div><div class="lbl">Donations &amp; gifts value</div></div>');
-  out.push('<div class="stat-pill"><div class="num">' + mp.donations.length + '</div><div class="lbl">Donations received</div></div>');
-  out.push('<div class="stat-pill"><div class="num">' + mp.employment.length + '</div><div class="lbl">Outside jobs (value undisclosed)</div></div>');
-  out.push('<div class="stat-pill"><div class="num">' + mp.gifts.length + '</div><div class="lbl">Gifts &amp; hospitality</div></div>');
+  out.push('<div class="stat-pill"><div class="num highlight">' + fmt(totalDonations) + '</div><div class="lbl">Donations declared</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + mp.employment.length + '</div><div class="lbl">Outside earnings (pay undisclosed)</div></div>');
+  out.push('<div class="stat-pill"><div class="num highlight">' + fmt(totalGifts) + '</div><div class="lbl">Gifts &amp; hospitality value</div></div>');
   out.push('</div>');
 
   // Donations section
