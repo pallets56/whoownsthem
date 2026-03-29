@@ -90,6 +90,19 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 .entry-sub:last-child { border-bottom: none; }
 .entry-sub-label { font-size: 13px; color: var(--mid); }
 .empty-section { color: var(--mid); font-size: 14px; padding: 12px 0; font-style: italic; }
+.show-more-wrap { padding: 12px 0; text-align: center; }
+.show-more-btn {
+  background: none;
+  border: 2px solid var(--black);
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-family: 'Karla', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.show-more-btn:hover { background: var(--black); color: var(--white); }
 .donor-btn {
   background: none;
   border: 1px solid var(--black);
@@ -302,6 +315,18 @@ function escAttrJs(s) {
   return String(s || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
 }
 
+function toggleSection(id, btn) {
+  var el = document.getElementById('hidden-' + id);
+  if (!el) return;
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    btn.textContent = 'Show less';
+  } else {
+    el.style.display = 'none';
+    btn.textContent = btn.textContent.replace('Show less', 'Show more');
+  }
+}
+
 function toggleDonor(id) {
   var panel = document.getElementById(id);
   if (!panel) return;
@@ -437,6 +462,52 @@ function extractVal(item) {
   return m ? parseFloat(m[1].replace(/,/g,'')) : 0;
 }
 
+function extractDonor(text) {
+  if (!text) return '';
+  // "Name of donor: X  Address..." format
+  var m = text.match(/Name of donor:\s*([^
+]+?)(?:\s{2,}|
+|Address of donor)/i);
+  if (m) return m[1].trim();
+  // "X - £Y" format
+  var m2 = text.match(/^([^-
+£]+?)\s*-\s*£/);
+  if (m2) return m2[1].trim();
+  // "X - £Y
+Donation Source" format
+  var m3 = text.match(/^([^
+£]+?)\s*-\s*£[\d,\.]+/);
+  if (m3) return m3[1].trim();
+  return '';
+}
+
+function sortByDate(items, dateField) {
+  return items.slice().sort(function(a, b) {
+    var da = a[dateField] || a.registered || a.start || '';
+    var db = b[dateField] || b.registered || b.start || '';
+    return db.localeCompare(da);
+  });
+}
+
+var SHOW_MORE_LIMIT = 20;
+
+function renderSection(title, count, innerHtml, sectionId) {
+  var html = '<div class="section">';
+  html += '<div class="section-header"><span class="section-title">' + title + '</span><span class="section-count">' + count + '</span></div>';
+  html += innerHtml;
+  html += '</div>';
+  return html;
+}
+
+function wrapWithShowMore(entries, sectionId) {
+  if (entries.length <= SHOW_MORE_LIMIT) return entries.join('');
+  var visible = entries.slice(0, SHOW_MORE_LIMIT).join('');
+  var hidden = entries.slice(SHOW_MORE_LIMIT).join('');
+  return visible +
+    '<div id="hidden-' + sectionId + '" style="display:none">' + hidden + '</div>' +
+    '<div class="show-more-wrap"><button class="show-more-btn" onclick="toggleSection('' + sectionId + '', this)">Show ' + (entries.length - SHOW_MORE_LIMIT) + ' more</button></div>';
+}
+
 function showMP(name, constituency) {
   var mp = MP_DATA[name];
   if (!mp) { showError('No data found for ' + name + '.'); return; }
@@ -502,47 +573,53 @@ function showMP(name, constituency) {
   out.push('<div class="stat-pill"><div class="num">' + (totalEmploymentExtracted > 0 ? fmt(totalEmploymentExtracted) : mp.employment.length + ' jobs') + '</div><div class="lbl">Outside earnings</div></div>');
   out.push('</div>');
 
+  // Helper: render entries with show-more
+  function renderEntries(entries, sectionId, renderFn) {
+    var rows = entries.map(renderFn);
+    return wrapWithShowMore(rows, sectionId);
+  }
+
   // Donations section
-  var donations = mp.donations.slice().sort(function(a,b) { return (b.value||0) - (a.value||0); });
+  var donations = sortByDate(mp.donations, 'received');
   out.push('<div class="section">');
   out.push('<div class="section-header"><span class="section-title">Donations received</span><span class="section-count">' + donations.length + '</span></div>');
   if (!donations.length) {
     out.push('<p class="empty-section">No donations declared.</p>');
   } else {
-    donations.forEach(function(d, di) {
-      var donor = d.donor || 'Unknown donor';
+    var donRows = donations.map(function(d, di) {
+      var donor = d.donor || extractDonor(d.summary) || 'Unknown donor';
       var others = DONOR_INDEX[donor] ? DONOR_INDEX[donor].filter(function(r) { return r.mp !== name; }) : [];
-      var donorId = 'donor-' + di + '-' + Date.now();
-      out.push('<div class="entry">');
-      out.push('<div class="entry-main">');
-      out.push('<div class="entry-who">' + esc(donor) + '</div>');
-      out.push('<div class="entry-detail">' + esc(d.type || '') + (d.donor_status ? ' &middot; ' + esc(d.donor_status) : ''));
+      var donorId = 'donor-' + di + '-' + name.replace(/[^a-z]/gi,'');
+      var row = '<div class="entry">';
+      row += '<div class="entry-main"><div class="entry-who">' + esc(donor) + '</div>';
+      row += '<div class="entry-detail">' + esc(d.type || '') + (d.donor_status ? ' &middot; ' + esc(d.donor_status) : '');
       if (others.length > 0) {
-        out.push(' &middot; <button class="donor-btn" onclick="toggleDonor(\'' + donorId + '\')">Also donated to ' + others.length + ' other MP' + (others.length !== 1 ? 's' : '') + ' &darr;</button>');
+        row += ' &middot; <button class="donor-btn" onclick="toggleDonor('' + donorId + '')">Also donated to ' + others.length + ' other MP' + (others.length !== 1 ? 's' : '') + ' &darr;</button>';
       }
-      out.push('</div>');
+      row += '</div>';
       if (others.length > 0) {
         var othersSorted = others.slice().sort(function(a,b) { return (b.value||0)-(a.value||0); });
-        out.push('<div class="donor-panel" id="' + donorId + '" style="display:none">');
-        out.push('<div class="donor-panel-title">Other MPs who declared donations from ' + esc(donor) + '</div>');
+        row += '<div class="donor-panel" id="' + donorId + '" style="display:none">';
+        row += '<div class="donor-panel-title">Other MPs who declared donations from ' + esc(donor) + '</div>';
         othersSorted.forEach(function(r) {
-          out.push('<div class="donor-panel-row">');
-          out.push('<span class="donor-panel-mp"><button class="donor-mp-link" onclick="showMP(\'' + escAttrJs(r.mp) + '\',\'\')">' + esc(r.mp) + '</button></span>');
-          out.push('<span class="donor-panel-val">' + (r.value ? fmt(r.value) : '') + '</span>');
-          out.push('<span class="donor-panel-date">' + fmtDate(r.received) + '</span>');
-          out.push('</div>');
+          row += '<div class="donor-panel-row">';
+          row += '<span class="donor-panel-mp"><button class="donor-mp-link" onclick="showMP('' + escAttrJs(r.mp) + '','')">' + esc(r.mp) + '</button></span>';
+          row += '<span class="donor-panel-val">' + (r.value ? fmt(r.value) : '') + '</span>';
+          row += '<span class="donor-panel-date">' + fmtDate(r.received) + '</span>';
+          row += '</div>';
         });
-        out.push('</div>');
+        row += '</div>';
       }
-      out.push('</div>');
-      out.push('<div><div class="entry-value">' + fmt(d.value) + '</div><div class="entry-date">' + fmtDate(d.received) + '</div></div>');
-      out.push('</div>');
+      row += '</div>';
+      row += '<div><div class="entry-value">' + fmt(extractVal(d)) + '</div><div class="entry-date">' + fmtDate(d.received) + '</div></div>';
+      row += '</div>';
+      return row;
     });
+    out.push(wrapWithShowMore(donRows, 'donations-' + name.replace(/[^a-z]/gi,'')));
   }
   out.push('</div>');
 
   // Employment section
-  // Group entries: parent employers first, then attach payment sub-entries to them
   var empGroups = [];
   var lastParent = null;
   mp.employment.forEach(function(e) {
@@ -557,104 +634,121 @@ function showMP(name, constituency) {
       else lastParent = null;
     }
   });
+  // Sort by date descending
+  empGroups.sort(function(a, b) {
+    var da = a.entry.registered || a.entry.start || '';
+    var db = b.entry.registered || b.entry.start || '';
+    return db.localeCompare(da);
+  });
 
   out.push('<div class="section">');
   out.push('<div class="section-header"><span class="section-title">Who else is paying them</span><span class="section-count">' + mp.employment.length + '</span></div>');
   if (!empGroups.length) {
     out.push('<p class="empty-section">No outside employment declared.</p>');
   } else {
-    empGroups.forEach(function(group) {
+    var empRows = empGroups.map(function(group) {
       var e = group.entry;
       var valMatch = (e.summary || '').match(/£([\d,]+\.?\d*)/);
       var extractedVal = valMatch ? parseFloat(valMatch[1].replace(/,/g,'')) : 0;
-      var displayName = e.payer || e.summary || '';
+      var displayName = e.payer || extractDonor(e.summary) || e.summary || '';
       var detail = e.job || '';
       if (e.payer && valMatch) { displayName = e.payer; detail = e.summary; }
-      if (!e.payer && valMatch) { displayName = e.summary; detail = ''; }
-
-      out.push('<div class="entry entry-parent">');
-      out.push('<div class="entry-main"><div class="entry-who">' + esc(displayName) + '</div>');
-      out.push('<div class="entry-detail">' + esc(detail) + '</div></div>');
-      out.push('<div>');
-      if (extractedVal > 0) out.push('<div class="entry-value">' + fmt(extractedVal) + '</div>');
-      out.push('<div class="entry-date">' + fmtDate(e.registered) + '</div>');
-      out.push('</div></div>');
-
-      // Payment sub-entries
-      if (group.payments.length) {
+      if (!e.payer && valMatch && /^Payment/i.test(e.summary)) { displayName = e.summary; detail = ''; }
+      var row = '<div class="entry entry-parent">';
+      row += '<div class="entry-main"><div class="entry-who">' + esc(displayName) + '</div>';
+      row += '<div class="entry-detail">' + esc(detail) + '</div></div>';
+      row += '<div>';
+      if (extractedVal > 0) row += '<div class="entry-value">' + fmt(extractedVal) + '</div>';
+      row += '<div class="entry-date">' + fmtDate(e.registered || e.start) + '</div>';
+      row += '</div></div>';
+      if (group.payments && group.payments.length) {
         group.payments.forEach(function(p) {
           var pm = (p.summary || '').match(/£([\d,]+\.?\d*)/);
           var pval = pm ? parseFloat(pm[1].replace(/,/g,'')) : 0;
-          out.push('<div class="entry entry-sub">');
-          out.push('<div class="entry-main"><div class="entry-detail entry-sub-label">' + esc(p.summary) + '</div></div>');
-          out.push('<div>');
-          if (pval > 0) out.push('<div class="entry-value">' + fmt(pval) + '</div>');
-          out.push('<div class="entry-date">' + fmtDate(p.registered) + '</div>');
-          out.push('</div></div>');
+          row += '<div class="entry entry-sub">';
+          row += '<div class="entry-main"><div class="entry-detail entry-sub-label">' + esc(p.summary) + '</div></div>';
+          row += '<div>';
+          if (pval > 0) row += '<div class="entry-value">' + fmt(pval) + '</div>';
+          row += '<div class="entry-date">' + fmtDate(p.registered) + '</div>';
+          row += '</div></div>';
         });
       }
+      return row;
     });
+    out.push(wrapWithShowMore(empRows, 'emp-' + name.replace(/[^a-z]/gi,'')));
   }
   out.push('</div>');
 
-  // Gifts
+  // Gifts section
   if (mp.gifts.length > 0) {
-    var gifts = mp.gifts.slice().sort(function(a,b) { return (b.value||0) - (a.value||0); });
+    var gifts = sortByDate(mp.gifts, 'received');
     out.push('<div class="section">');
     out.push('<div class="section-header"><span class="section-title">Gifts &amp; hospitality</span><span class="section-count">' + gifts.length + '</span></div>');
-    gifts.forEach(function(g) {
-      // Extract donor name from summary if donor field is empty
-      var donor = g.donor || '';
-      if (!donor) {
-        var m = (g.summary || g.description || '').match(/^([^-\n£]+?)(?:\s*-\s*£|\n|$)/);
-        if (m) donor = m[1].replace(/^Name of donor:\s*/i,'').trim();
-      }
-      donor = donor || 'Unknown';
+    var giftRows = gifts.map(function(g) {
+      var donor = g.donor || extractDonor(g.summary || g.description || '') || 'Unknown';
       var desc = g.description || g.summary || '';
-      // Clean up free text descriptions
-      desc = desc.replace(/^[^-\n]+\s*-\s*£[\d,\.]+\s*/,'').replace(/^Name of donor:[^\n]+\n?/im,'').replace(/^Address of donor:[^\n]+\n?/im,'').trim();
+      desc = desc.replace(/^Name of donor:[^
+]+
+?/im,'').replace(/^Address of donor:[^
+]+
+?/im,'').replace(/^Amount of donation[^
+]+
+?/im,'').replace(/^Payment Type:[^
+]+
+?/im,'').replace(/^Payment Description:\s*/i,'').trim();
       if (desc.length > 120) desc = desc.substring(0, 120) + '...';
-      out.push('<div class="entry">');
-      out.push('<div class="entry-main"><div class="entry-who">' + esc(g.donor || 'Unknown') + '</div>');
-      out.push('<div class="entry-detail">' + esc(desc) + '</div></div>');
-      out.push('<div><div class="entry-value">' + fmt(extractVal(g)) + '</div><div class="entry-date">' + fmtDate(g.received) + '</div></div>');
-      out.push('</div>');
+      var row = '<div class="entry">';
+      row += '<div class="entry-main"><div class="entry-who">' + esc(donor) + '</div>';
+      row += '<div class="entry-detail">' + esc(desc) + '</div></div>';
+      row += '<div><div class="entry-value">' + fmt(extractVal(g)) + '</div><div class="entry-date">' + fmtDate(g.received) + '</div></div>';
+      row += '</div>';
+      return row;
     });
+    out.push(wrapWithShowMore(giftRows, 'gifts-' + name.replace(/[^a-z]/gi,'')));
     out.push('</div>');
   }
 
-  // Visits
+  // Visits section
   if (mp.visits && mp.visits.length > 0) {
+    var visits = sortByDate(mp.visits, 'start');
     out.push('<div class="section">');
-    out.push('<div class="section-header"><span class="section-title">Overseas visits paid by others</span><span class="section-count">' + mp.visits.length + '</span></div>');
-    mp.visits.forEach(function(v) {
-      var loc = v.destination ? v.country + ' \u2014 ' + v.destination : (v.country || '');
-      var purpose = v.purpose || '';
+    out.push('<div class="section-header"><span class="section-title">Overseas visits paid by others</span><span class="section-count">' + visits.length + '</span></div>');
+    var visitRows = visits.map(function(v) {
+      var loc = v.destination ? v.country + ' — ' + v.destination : (v.country || '');
+      if (!loc) {
+        var lm = (v.summary||'').match(/to ([A-Z][^,\.]+?)(?:,|\.|$)/);
+        if (lm) loc = lm[1].trim();
+      }
+      var purpose = v.purpose || v.summary || '';
       if (purpose.length > 120) purpose = purpose.substring(0, 120) + '...';
       var donors = (v.donors && v.donors.length) ? 'Paid by: ' + v.donors.join(', ') : '';
-      out.push('<div class="entry">');
-      out.push('<div class="entry-main"><div class="entry-who">' + esc(loc) + '</div>');
-      out.push('<div class="entry-detail">' + esc(purpose) + (donors ? ' &middot; ' + esc(donors) : '') + '</div></div>');
-      out.push('<div><div class="entry-date">' + fmtDate(v.start) + '</div></div>');
-      out.push('</div>');
+      var row = '<div class="entry">';
+      row += '<div class="entry-main"><div class="entry-who">' + esc(loc || v.summary || '') + '</div>';
+      row += '<div class="entry-detail">' + esc(purpose) + (donors ? ' &middot; ' + esc(donors) : '') + '</div></div>';
+      row += '<div><div class="entry-date">' + fmtDate(v.start) + '</div></div>';
+      row += '</div>';
+      return row;
     });
+    out.push(wrapWithShowMore(visitRows, 'visits-' + name.replace(/[^a-z]/gi,'')));
     out.push('</div>');
   }
 
-  // Shareholdings
+  // Shareholdings section
   if (mp.shareholdings && mp.shareholdings.length > 0) {
     out.push('<div class="section">');
     out.push('<div class="section-header"><span class="section-title">Shareholdings</span><span class="section-count">' + mp.shareholdings.length + '</span></div>');
-    mp.shareholdings.forEach(function(s) {
-      out.push('<div class="entry">');
-      out.push('<div class="entry-main"><div class="entry-who">' + esc(s.company || s.summary || '') + '</div></div>');
-      out.push('<div><div class="entry-date">' + fmtDate(s.registered) + '</div></div>');
-      out.push('</div>');
+    var shareRows = mp.shareholdings.map(function(s) {
+      var row = '<div class="entry">';
+      row += '<div class="entry-main"><div class="entry-who">' + esc(s.company || s.summary || '') + '</div></div>';
+      row += '<div><div class="entry-date">' + fmtDate(s.registered) + '</div></div>';
+      row += '</div>';
+      return row;
     });
+    out.push(wrapWithShowMore(shareRows, 'shares-' + name.replace(/[^a-z]/gi,'')));
     out.push('</div>');
   }
 
-  // Share bar
+    // Share bar
   var shareText = 'My MP ' + name + ' declared ' + mp.donations.length + ' donation' + (mp.donations.length !== 1 ? 's' : '') + (totalDonations > 0 ? ' worth ' + fmt(totalDonations) : '') + ' and ' + mp.employment.length + ' outside job' + (mp.employment.length !== 1 ? 's' : '') + '. Find out who funds yours: whofundsthem.uk';
 
   out.push('<div class="share-bar">');
