@@ -546,7 +546,7 @@ function showMP(name, constituency) {
   var empGroups = [];
   var lastParent = null;
   mp.employment.forEach(function(e) {
-    var isPayment = !e.payer && /Payment (received|expected)/i.test(e.summary || '');
+    var isPayment = /^Payment (received|expected)/i.test(e.summary || '');
     if (isPayment && lastParent) {
       lastParent.payments = lastParent.payments || [];
       lastParent.payments.push(e);
