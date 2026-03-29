@@ -13,6 +13,7 @@ header { background: var(--black); color: var(--white); padding: 0 24px; display
 .header-brand { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; color: var(--white); text-decoration: none; }
 .header-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--red); text-transform: uppercase; }
 .hero {
+  overflow: visible;
   background: var(--black);
   color: var(--white);
   padding: 52px 24px 48px;
@@ -38,7 +39,7 @@ header { background: var(--black); color: var(--white); padding: 0 24px; display
 .tab-btn { flex: 1; background: transparent; color: #888; border: none; padding: 10px 16px; font-family: 'Karla', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; }
 .tab-btn.active { background: var(--white); color: var(--black); }
 .tab-btn:not(.active):hover { color: var(--white); }
-.search-box { background: var(--white); border-radius: 0 0 8px 8px; padding: 20px; position: relative; }
+.search-box { background: var(--white); border-radius: 0 0 8px 8px; padding: 20px; position: relative; overflow: visible; }
 .search-inner { display: flex; gap: 10px; }
 .search-input { flex: 1; border: 2px solid var(--black); border-radius: 6px; padding: 13px 16px; font-family: 'Karla', sans-serif; font-size: 16px; font-weight: 700; outline: none; background: var(--white); color: var(--black); transition: border-color 0.15s; }hite); color: var(--black); transition: border-color 0.15s; }
 .search-input:focus { border-color: var(--red); }
@@ -46,7 +47,7 @@ header { background: var(--black); color: var(--white); padding: 0 24px; display
 .search-btn { background: var(--red); color: var(--white); border: none; border-radius: 6px; padding: 13px 24px; font-family: 'Karla', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
 .search-btn:hover { background: #c41a08; }
 .search-btn:disabled { background: #888; cursor: wait; }
-.autocomplete-list { position: absolute; top: calc(100% - 8px); left: 20px; right: 20px; background: var(--white); border: 2px solid var(--black); border-top: none; border-radius: 0 0 6px 6px; z-index: 50; max-height: 220px; overflow-y: auto; display: none; }
+.autocomplete-list { position: absolute; top: calc(100% - 8px); left: 20px; right: 20px; background: var(--white); border: 2px solid var(--black); border-top: none; border-radius: 0 0 6px 6px; z-index: 1000; max-height: 220px; overflow-y: auto; display: none; }
 .autocomplete-item { padding: 10px 16px; cursor: pointer; font-weight: 700; font-size: 15px; border-bottom: 1px solid var(--grey); color: var(--black); background: var(--white); }
 .autocomplete-item:last-child { border-bottom: none; }
 .autocomplete-item:hover { background: var(--yellow); }
@@ -435,10 +436,15 @@ function showMP(name, constituency) {
   var mp = MP_DATA[name];
   if (!mp) { showError('No data found for ' + name + '.'); return; }
 
+  function extractVal(item) {
+    if (item.value && item.value > 0) return item.value;
+    var m = (item.summary || item.description || '').match(/£([\d,]+(?:\.\d+)?)/);
+    return m ? parseFloat(m[1].replace(/,/g,'')) : 0;
+  }
   var totalDonations = 0;
-  for (var i = 0; i < mp.donations.length; i++) { totalDonations += mp.donations[i].value || 0; }
+  for (var i = 0; i < mp.donations.length; i++) { totalDonations += extractVal(mp.donations[i]); }
   var totalGifts = 0;
-  for (var i = 0; i < mp.gifts.length; i++) { totalGifts += mp.gifts[i].value || 0; }
+  for (var i = 0; i < mp.gifts.length; i++) { totalGifts += extractVal(mp.gifts[i]); }
   var totalAll = totalDonations + totalGifts;
 
   var out = [];
@@ -611,7 +617,7 @@ function showMP(name, constituency) {
       out.push('<div class="entry">');
       out.push('<div class="entry-main"><div class="entry-who">' + esc(g.donor || 'Unknown') + '</div>');
       out.push('<div class="entry-detail">' + esc(desc) + '</div></div>');
-      out.push('<div><div class="entry-value">' + fmt(g.value) + '</div><div class="entry-date">' + fmtDate(g.received) + '</div></div>');
+      out.push('<div><div class="entry-value">' + fmt(extractVal(g)) + '</div><div class="entry-date">' + fmtDate(g.received) + '</div></div>');
       out.push('</div>');
     });
     out.push('</div>');
