@@ -78,6 +78,9 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 .entry-detail { font-size: 13px; color: var(--mid); line-height: 1.4; }
 .entry-value { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; color: var(--red); white-space: nowrap; text-align: right; }
 .entry-date { font-size: 11px; color: #aaa; font-family: 'Space Mono', monospace; text-align: right; margin-top: 2px; }
+.year-tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
+.year-tag-current { background: #e8f5e9; color: #2e7d32; }
+.year-tag-historical { background: #f5f5f5; color: #888; border: 1px solid #ddd; } margin-top: 2px; }
 .entry-sub {
   padding: 6px 0 6px 16px;
   border-bottom: 1px solid var(--grey);
@@ -479,6 +482,14 @@ Donation Source" format
 £]+?)\s*-\s*£[\d,\.]+/);
   if (m3) return m3[1].trim();
   return '';
+}
+
+function yearTag(dateStr) {
+  if (!dateStr) return '';
+  var year = dateStr.substring(0, 4);
+  if (!year || isNaN(parseInt(year))) return '';
+  var isCurrent = parseInt(year) >= 2024;
+  return '<span class="year-tag ' + (isCurrent ? 'year-tag-current' : 'year-tag-historical') + '">' + year + '</span>';
 }
 
 function sortByDate(items, dateField) {
