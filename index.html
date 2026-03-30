@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Who Owns Them? | Find out who owns your MP</title>
+<title>Who Funds Them? | Find out who pays your MP</title>
 <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,53 +12,29 @@ body { background: var(--white); color: var(--black); font-family: 'Karla', sans
 header { background: var(--black); color: var(--white); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--red); position: sticky; top: 0; z-index: 100; height: 52px; }
 .header-brand { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; color: var(--white); text-decoration: none; }
 .header-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--red); text-transform: uppercase; }
-.hero {
-  background: var(--black);
-  color: var(--white);
-  padding: 52px 24px 48px;
-  text-align: center;
-  position: relative;
-  overflow: visible;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1486299267070-83823f5448dd?q=80&w=2342&auto=format&fit=crop') center/cover no-repeat;
-  opacity: 0.18;
-  z-index: 0;
-}
-.hero > * { position: relative; z-index: 1; }
+.hero { background: var(--black); color: var(--white); padding: 52px 24px 48px; text-align: center; }
 .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--red); text-transform: uppercase; margin-bottom: 16px; }
 .hero h1 { font-size: clamp(36px, 7vw, 72px); font-weight: 800; line-height: 1.0; margin-bottom: 20px; letter-spacing: -0.02em; }
 .hero h1 span { color: var(--yellow); }
 .hero-sub { font-size: clamp(16px, 2.5vw, 20px); color: #bbb; max-width: 580px; margin: 0 auto 36px; }
-.search-wrap { max-width: 640px; margin: 0 auto; position: relative; z-index: 150; }
-.search-tabs { display: flex; border: 2px solid var(--white); border-radius: 8px 8px 0 0; overflow: hidden; }
-.tab-btn { flex: 1; background: transparent; color: #888; border: none; padding: 10px 16px; font-family: 'Karla', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; }
-.tab-btn.active { background: var(--white); color: var(--black); }
-.tab-btn:not(.active):hover { color: var(--white); }
-.search-box { background: var(--white); border-radius: 0 0 8px 8px; padding: 20px; position: relative; overflow: visible; }
+.search-wrap { max-width: 640px; margin: 0 auto; }
+.search-box { background: var(--white); border-radius: 8px; padding: 16px; position: relative; overflow: visible; }
 .search-inner { display: flex; gap: 10px; }
-.search-input { flex: 1; border: 2px solid var(--black); border-radius: 6px; padding: 13px 16px; font-family: 'Karla', sans-serif; font-size: 16px; font-weight: 700; outline: none; background: var(--white); color: var(--black); transition: border-color 0.15s; }hite); color: var(--black); transition: border-color 0.15s; }
+.search-input { flex: 1; border: 2px solid var(--black); border-radius: 6px; padding: 13px 16px; font-family: 'Karla', sans-serif; font-size: 16px; font-weight: 700; outline: none; background: var(--white); color: var(--black); transition: border-color 0.15s; }
 .search-input:focus { border-color: var(--red); }
 .search-input::placeholder { color: var(--mid); font-weight: 400; }
-.search-btn { background: var(--red); color: var(--white); border: none; border-radius: 6px; padding: 13px 24px; font-family: 'Karla', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+.search-btn { background: var(--red); color: var(--white); border: none; border-radius: 6px; padding: 13px 20px; font-family: 'Karla', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background 0.15s; flex-shrink: 0; }
 .search-btn:hover { background: #c41a08; }
 .search-btn:disabled { background: #888; cursor: wait; }
-.autocomplete-list { position: absolute; top: calc(100% - 8px); left: 20px; right: 20px; background: var(--white); border: 2px solid var(--black); border-top: none; border-radius: 0 0 6px 6px; z-index: 1000; max-height: 220px; overflow-y: auto; display: none; }
-.autocomplete-item { padding: 10px 16px; cursor: pointer; font-weight: 700; font-size: 15px; border-bottom: 1px solid var(--grey); color: var(--black); background: var(--white); }
+.autocomplete-list { position: absolute; top: calc(100% - 8px); left: 20px; right: 20px; background: var(--white); border: 2px solid var(--black); border-top: none; border-radius: 0 0 6px 6px; z-index: 200; max-height: 220px; overflow-y: auto; display: none; }
+.autocomplete-item { padding: 10px 16px; cursor: pointer; font-weight: 700; font-size: 15px; border-bottom: 1px solid var(--grey); }
 .autocomplete-item:last-child { border-bottom: none; }
 .autocomplete-item:hover { background: var(--yellow); }
 .search-hint { font-size: 12px; color: #888; margin-top: 10px; text-align: center; }
-main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
+main { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
 .status { text-align: center; padding: 60px 24px; color: var(--mid); font-size: 16px; }
 .status-error { color: var(--red) !important; font-weight: 700; }
 .mp-header { padding: 40px 0 24px; border-bottom: 3px solid var(--black); margin-bottom: 32px; }
-.mp-header-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
-.mp-header-text { flex: 1; }
-.mp-photo-wrap { flex: 0 0 80px; }
-.mp-photo { width: 80px; height: 80px; object-fit: cover; object-position: top; border-radius: 6px; border: 2px solid var(--black); display: block; }
 .mp-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; font-weight: 700; }
 .mp-name { font-size: clamp(28px, 5vw, 48px); font-weight: 800; line-height: 1.1; margin-bottom: 8px; letter-spacing: -0.02em; }
 .mp-meta { font-size: 14px; color: var(--mid); font-family: 'Space Mono', monospace; }
@@ -78,88 +54,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 .entry-detail { font-size: 13px; color: var(--mid); line-height: 1.4; }
 .entry-value { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; color: var(--red); white-space: nowrap; text-align: right; }
 .entry-date { font-size: 11px; color: #aaa; font-family: 'Space Mono', monospace; text-align: right; margin-top: 2px; }
-.year-tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
-.year-tag-current { background: #e8f5e9; color: #2e7d32; }
-.year-tag-historical { background: #f5f5f5; color: #888; border: 1px solid #ddd; } margin-top: 2px; }
-.entry-sub {
-  padding: 6px 0 6px 16px;
-  border-bottom: 1px solid var(--grey);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  background: #f9f9f6;
-}
-.entry-sub:last-child { border-bottom: none; }
-.entry-sub-label { font-size: 13px; color: var(--mid); }
 .empty-section { color: var(--mid); font-size: 14px; padding: 12px 0; font-style: italic; }
-.show-more-wrap { padding: 12px 0; text-align: center; }
-.show-more-btn {
-  background: none;
-  border: 2px solid var(--black);
-  border-radius: 6px;
-  padding: 8px 24px;
-  font-family: 'Karla', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.show-more-btn:hover { background: var(--black); color: var(--white); }
-.donor-btn {
-  background: none;
-  border: 1px solid var(--black);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: 'Karla', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--black);
-  transition: all 0.1s;
-}
-.donor-btn:hover { background: var(--black); color: var(--white); }
-.donor-panel {
-  margin-top: 10px;
-  background: #f0efe8;
-  border-left: 3px solid var(--red);
-  padding: 12px 16px;
-  border-radius: 0 4px 4px 0;
-}
-.donor-panel-title {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--mid);
-  margin-bottom: 10px;
-  font-family: 'Space Mono', monospace;
-}
-.donor-panel-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 5px 0;
-  border-bottom: 1px solid var(--grey);
-  font-size: 14px;
-}
-.donor-panel-row:last-child { border-bottom: none; }
-.donor-panel-mp { flex: 1; }
-.donor-mp-link {
-  background: none;
-  border: none;
-  font-family: 'Karla', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--black);
-  text-decoration: underline;
-  padding: 0;
-  text-align: left;
-}
-.donor-mp-link:hover { color: var(--red); }
-.donor-panel-val { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--red); font-weight: 700; white-space: nowrap; }
-.donor-panel-date { font-family: 'Space Mono', monospace; font-size: 11px; color: #aaa; white-space: nowrap; }
 .share-bar { background: var(--yellow); border: 2px solid var(--black); border-radius: 8px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 40px; }
 .share-text { font-weight: 800; font-size: 16px; flex: 1; min-width: 200px; }
 .share-btns { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -167,44 +62,13 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 .share-btn:hover { background: var(--red); }
 .source-note { font-size: 12px; color: var(--mid); text-align: center; padding: 20px 0 0; font-family: 'Space Mono', monospace; }
 .source-note a { color: var(--mid); }
-.ehe-footer { background: var(--black); color: var(--white); text-align: center; padding: 40px 24px; margin-top: 0; }
+.ehe-footer { background: var(--black); color: var(--white); text-align: center; padding: 40px 24px; margin-top: 60px; }
 .ehe-footer .logo { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: var(--red); text-transform: uppercase; margin-bottom: 6px; }
 .ehe-footer .strapline { font-size: clamp(18px, 3vw, 28px); font-weight: 800; margin-bottom: 12px; }
 .ehe-footer p { font-size: 14px; color: #888; margin-top: 8px; }
 .ehe-footer a { color: var(--yellow); text-decoration: none; font-weight: 700; }
 .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 6px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.simple-story {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 32px 24px 32px;
-  text-align: center;
-}
-.story-line {
-  font-size: clamp(22px, 4vw, 36px);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  margin-bottom: 12px;
-}
-.story-line.secondary {
-  color: var(--mid);
-  font-size: clamp(18px, 3vw, 28px);
-  margin-bottom: 28px;
-}
-.story-body {
-  font-size: 16px;
-  color: #555;
-  line-height: 1.7;
-  max-width: 560px;
-  margin: 0 auto 20px;
-}
-.story-cta {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--black);
-  margin-top: 8px;
-}
 @media (max-width: 600px) {
   .hero { padding: 36px 16px 32px; }
   main { padding: 0 16px 60px; }
@@ -218,49 +82,42 @@ main { max-width: 900px; margin: 0 auto; padding: 0 24px 0; }
 <body>
 
 <header>
-  <span class="header-brand">WHO OWNS THEM?</span>
+  <span class="header-brand">WHO FUNDS THEM?</span>
   <span class="header-tag">Everyone Hates Elon</span>
 </header>
 
 <div class="hero">
-  <p class="hero-eyebrow">Everyone Hates Elon</p>
-  <h1>Find out who <span>owns</span> your MP</h1>
-  <p class="hero-sub">Every gift, every donor, every second job. Find out who's bankrolling your MP.</p>
+  <p class="hero-eyebrow">Register of Members' Financial Interests</p>
+  <h1>Find out who's <span>paying</span> your MP</h1>
+  <p class="hero-sub">MPs are legally required to declare who pays them, who donates to them, and what gifts they accept. We made it searchable.</p>
 
   <div class="search-wrap">
-    <div class="search-box" style="border-radius:8px">
+    <div class="search-box" style="border-radius:8px;">
       <div class="search-inner">
-        <input type="text" class="search-input" id="searchInput" placeholder="Enter your postcode or MP's name..." autocomplete="off" spellcheck="false" />
+        <input type="text" class="search-input" id="searchInput" placeholder="e.g. SW1A 1AA or Keir Starmer" autocomplete="off" spellcheck="false" />
         <button class="search-btn" id="searchBtn" onclick="doSearch()">Search</button>
       </div>
       <div class="autocomplete-list" id="autocompleteList"></div>
-      <p class="search-hint" id="searchHint">e.g. SW1A 1AA &nbsp;&middot;&nbsp; Keir Starmer &nbsp;&middot;&nbsp; Nigel Farage</p>
+      <p class="search-hint">e.g. SW1A 1AA &middot; Keir Starmer &middot; Nigel Farage</p>
     </div>
   </div>
 </div>
 
 <main>
-  <div id="results"></div>
-
-<div id="intro-content">
-  <div class="simple-story">
-    <p class="story-body"><strong>Your MP votes on your wages, your rent, your NHS.</strong> We dug through Parliament's official register of financial interests - every donation, every outside job, every freebie, every corporate-funded trip - and made it searchable in seconds.</p>
-    <p class="story-cta">Type your postcode. Find out who owns your MP.</p>
+  <div id="results">
+    <div class="status">Enter your postcode or your MP's name above to see who funds them.</div>
   </div>
-</div>
 </main>
 
 <footer class="ehe-footer">
   <div class="logo">Everyone Hates Elon</div>
   <div class="strapline">Billionaires own the politicians.<br>Now you can see who owns yours.</div>
-  <p>Data: <a href="https://interests-api.parliament.uk" target="_blank">Parliament's Register of Members' Financial Interests</a> &mdash; updated weekly</p>
+  <p>Data: <a href="https://interests-api.parliament.uk" target="_blank">Parliament's Register of Members' Financial Interests</a> &mdash; March 2026</p>
   <p style="margin-top:12px"><a href="https://www.instagram.com/everyonehateselon_/" target="_blank">@everyonehateselon_</a></p>
 </footer>
 
 <script src="mpdata_v2.js"></script>
-<script>const DONOR_INDEX = {"Michael Tory":[{"mp":"Tom Tugendhat","value":38000.0,"received":"2025-04-22","type":"Monetary"}],"Celestine Management Limited":[{"mp":"Tom Tugendhat","value":10000.0,"received":"2025-03-03","type":"Monetary"},{"mp":"Tom Tugendhat","value":25000.0,"received":"2025-03-04","type":"Monetary"}],"Refrigeration House Limited":[{"mp":"Angela Rayner","value":50000.0,"received":"2026-02-25","type":"Monetary"},{"mp":"Angela Rayner","value":50000.0,"received":"2025-12-23","type":"Monetary"}],"Trevor Chinn":[{"mp":"Angela Rayner","value":2500.0,"received":"2026-03-04","type":"Monetary"},{"mp":"Angela Rayner","value":2500.0,"received":"2026-01-07","type":"Monetary"},{"mp":"Wes Streeting","value":5000.0,"received":"2025-01-30","type":"Monetary"},{"mp":"Sarah Sackman","value":1250.0,"received":"","type":"Monetary"},{"mp":"Sarah Sackman","value":1250.0,"received":"","type":"Monetary"},{"mp":"Sarah Sackman","value":2500.0,"received":"","type":"Monetary"},{"mp":"Jon Pearce","value":1250.0,"received":"2025-09-03","type":"Monetary"}],"Martin Littler":[{"mp":"Angela Rayner","value":5000.0,"received":"2026-02-03","type":"Monetary"},{"mp":"Angela Rayner","value":5000.0,"received":"2025-12-09","type":"Monetary"},{"mp":"Jonathan Reynolds","value":3000.0,"received":"","type":"Monetary"}],"Richard Greer":[{"mp":"Angela Rayner","value":5000.0,"received":"2026-01-26","type":"Monetary"},{"mp":"Angela Rayner","value":5000.0,"received":"2026-01-08","type":"Monetary"},{"mp":"Sarah Sackman","value":1000.0,"received":"","type":"Monetary"},{"mp":"Sarah Sackman","value":2000.0,"received":"","type":"Monetary"}],"Aid Alliance":[{"mp":"Sir Andrew Mitchell","value":2400.0,"received":"2026-02-01","type":"In kind"},{"mp":"Sir Andrew Mitchell","value":1600.0,"received":"2025-12-01","type":"In kind"},{"mp":"Sir Andrew Mitchell","value":2000.0,"received":"2025-11-01","type":"In kind"},{"mp":"Sir Andrew Mitchell","value":1600.0,"received":"2025-06-01","type":"In kind"},{"mp":"Sir Andrew Mitchell","value":800.0,"received":"2025-05-05","type":"In kind"},{"mp":"Sir Andrew Mitchell","value":2400.0,"received":"2025-03-01","type":"In kind"},{"mp":"Sir Andrew Mitchell","value":5600.0,"received":"2024-11-04","type":"In kind"},{"mp":"Dr Beccy Cooper","value":1860.0,"received":"2026-01-19","type":"In kind"},{"mp":"Fleur Anderson","value":1860.0,"received":"2026-01-19","type":"In kind"}],"Beaver Metals & Metallic Extractors":[{"mp":"Sir Andrew Mitchell","value":10000.0,"received":"","type":"Monetary"}],"Glass Express Midlands Ltd":[{"mp":"Sir Andrew Mitchell","value":7500.0,"received":"","type":"Monetary"}],"Beaver Metals (London) Limited":[{"mp":"Sir Andrew Mitchell","value":10000.0,"received":"","type":"Monetary"}],"Mr. Alan Halsall":[{"mp":"Dan Carden","value":5000.0,"received":"2025-07-09","type":"Monetary"}],"Carl Michel":[{"mp":"Mike Martin","value":2000.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":2000.0,"received":"","type":"Monetary"},{"mp":"Josh Babarinde","value":2000.0,"received":"","type":"Monetary"},{"mp":"Josh Babarinde","value":2000.0,"received":"","type":"Monetary"},{"mp":"Daisy Cooper","value":2000.0,"received":"","type":"Monetary"},{"mp":"Daisy Cooper","value":2000.0,"received":"","type":"Monetary"},{"mp":"Clive Jones","value":2000.0,"received":"","type":"Monetary"}],"Dominic Mathon":[{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":2000.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":800.0,"received":"","type":"Monetary"},{"mp":"Lisa Smart","value":2500.0,"received":"","type":"Monetary"}],"John Harley":[{"mp":"Mike Martin","value":2000.0,"received":"","type":"Monetary"}],"Jonathon Goodfellow":[{"mp":"Mike Martin","value":1000.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":1500.0,"received":"","type":"Monetary"}],"Leslie Hurst":[{"mp":"Mike Martin","value":1000.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":1500.0,"received":"","type":"Monetary"}],"Phillip Kerle":[{"mp":"Mike Martin","value":1000.0,"received":"","type":"Monetary"}],"Susan Barone":[{"mp":"Mike Martin","value":5000.0,"received":"","type":"Monetary"}],"Andy Byrne":[{"mp":"Mike Martin","value":5000.0,"received":"","type":"Monetary"}],"Stephen Gosling":[{"mp":"Mike Martin","value":2000.0,"received":"","type":"Monetary"}],"Simon Curtis":[{"mp":"Mike Martin","value":1000.0,"received":"","type":"Monetary"},{"mp":"Daisy Cooper","value":1500.0,"received":"","type":"Monetary"}],"Ramesh Dewan":[{"mp":"Mike Martin","value":3153.28,"received":"","type":"In kind"},{"mp":"Mike Martin","value":3330.92,"received":"","type":"In kind"},{"mp":"Jess Brown-Fuller","value":2182.5,"received":"","type":"In kind"},{"mp":"Daisy Cooper","value":1643.97,"received":"2025-04-10","type":"In kind"}],"Field View Mentors Limited":[{"mp":"Mike Martin","value":3000.0,"received":"","type":"Monetary"}],"William Reeve":[{"mp":"Mike Martin","value":1500.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":1500.0,"received":"","type":"Monetary"}],"Charles Pope":[{"mp":"Mike Martin","value":1500.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":1500.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":750.0,"received":"","type":"Monetary"}],"Antony Harris":[{"mp":"Mike Martin","value":1250.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":1000.0,"received":"","type":"Monetary"},{"mp":"Mike Martin","value":1000.0,"received":"","type":"Monetary"}],"Sue Bishop":[{"mp":"Mike Martin","value":2000.0,"received":"","type":"Monetary"}],"Timothy Wormington":[{"mp":"Mike Martin","value":1500.0,"received":"","type":"Monetary"}],"Sophie Smith":[{"mp":"Laura Trott","value":4000.0,"received":"2025-12-20","type":"Monetary"},{"mp":"Laura Trott","value":10000.0,"received":"","type":"Monetary"}],"Lord Agnew":[{"mp":"Laura Trott","value":10000.0,"received":"2025-11-20","type":"Monetary"}],"Lord John Nash":[{"mp":"Laura Trott","value":3000.0,"received":"2025-08-19","type":"Monetary"},{"mp":"Laura Trott","value":30000.0,"received":"","type":"Monetary"}],"Charles Max Keymer":[{"mp":"Laura Trott","value":2500.0,"received":"2025-07-23","type":"Monetary"}],"Lord Philip Harris":[{"mp":"Laura Trott","value":25000.0,"received":"2025-07-14","type":"Monetary"}],"Lord Fink":[{"mp":"Laura Trott","value":10000.0,"received":"2025-06-05","type":"Monetary"}],"James Moore":[{"mp":"Ed Davey","value":6000.0,"received":"","type":"Monetary"},{"mp":"Jess Brown-Fuller","value":5000.0,"received":"","type":"Monetary"},{"mp":"Vikki Slade","value":2500.0,"received":"","type":"Monetary"},{"mp":"Max Wilkinson","value":2500.0,"received":"","type":"Monetary"},{"mp":"Max Wilkinson","value":2000.0,"received":"","type":"Monetary"},{"mp":"Anna Sabine","value":3032.25,"received":"","type":"Monetary"}],"Stuart Robb":[{"mp":"Ed Davey","value":5000.0,"received":"","type":"Monetary"}],"Francesca Sainsbury Perrin":[{"mp":"Dr Zubir Ahmed","value":30000.0,"received":"2026-02-23","type":"Monetary"}],"Hugh Sloane":[{"mp":"Alan Mak","value":7500.0,"received":"2025-11-03","type":"Monetary"}],"Yasin Al-Gailani":[{"mp":"Alan Mak","value":5000.0,"received":"2025-09-19","type":"Monetary"}],"Graham Edwards":[{"mp":"Alan Mak","value":8500.0,"received":"2025-08-06","type":"Monetary"},{"mp":"Sir Mel Stride","value":4000.0,"received":"2025-09-12","type":"Monetary"}],"Michael Ashcroft":[{"mp":"Alan Mak","value":7500.0,"received":"2025-07-28","type":"Monetary"}],"Chevening\u00a0Industries Limited":[{"mp":"Alan Mak","value":11705.27,"received":"2025-06-30","type":"In kind"}],"David Smyth":[{"mp":"Alan Mak","value":2500.0,"received":"2025-07-15","type":"Monetary"}],"Damon de Laszlo":[{"mp":"Alan Mak","value":5000.0,"received":"2025-07-10","type":"Monetary"}],"Chris Wood":[{"mp":"Alan Mak","value":17500.0,"received":"2025-07-07","type":"Monetary"}],"Yan Huo":[{"mp":"Alan Mak","value":20000.0,"received":"2025-07-08","type":"Monetary"}],"Stanley Fink":[{"mp":"Alan Mak","value":5000.0,"received":"2025-07-06","type":"Monetary"}],"Outward Capital LLP":[{"mp":"Alan Mak","value":1641.32,"received":"2025-06-11","type":"In kind"}],"Polyseam Limited":[{"mp":"Alan Mak","value":5000.0,"received":"2025-06-13","type":"Monetary"},{"mp":"Alan Mak","value":5000.0,"received":"2025-04-11","type":"Monetary"}],"Oluwole Kolade":[{"mp":"Alan Mak","value":5000.0,"received":"2025-05-21","type":"Monetary"},{"mp":"Nick Timothy","value":5000.0,"received":"2026-02-13","type":"Monetary"}],"UB Healthcare Ltd":[{"mp":"Dr Neil Shastri-Hurst","value":300.0,"received":"2025-07-18","type":"Monetary"}],"Eleanor Shanks":[{"mp":"Dr Neil Shastri-Hurst","value":2000.0,"received":"2025-04-03","type":"Monetary"}],"Good Law Project Ltd":[{"mp":"Clive Lewis","value":3100.0,"received":"2026-01-01","type":"Monetary"}],"Compass - Together for a Good Society Ltd":[{"mp":"Clive Lewis","value":13400.0,"received":"2025-11-01","type":"In kind"},{"mp":"Clive Lewis","value":13756.95,"received":"2025-10-27","type":"In kind"},{"mp":"Clive Lewis","value":6903.75,"received":"2025-06-23","type":"In kind"},{"mp":"Clive Lewis","value":1107.6,"received":"2025-05-12","type":"Monetary"},{"mp":"Clive Lewis","value":2582.4,"received":"2025-03-11","type":"In kind"},{"mp":"Clive Lewis","value":9849.59,"received":"2024-12-10","type":"In kind"}],"Sandeep Maudgil":[{"mp":"Clive Lewis","value":20000.0,"received":"2025-04-09","type":"Monetary"}],"Betterworld Ltd":[{"mp":"Clive Lewis","value":5000.0,"received":"2025-03-13","type":"Monetary"},{"mp":"Dan Tomlinson","value":2500.0,"received":"","type":"Monetary"}],"Mr Ian Crewe":[{"mp":"Steve Barclay","value":3000.0,"received":"2025-11-07","type":"Monetary"}],"Fens Business Club":[{"mp":"Steve Barclay","value":4070.72,"received":"","type":"Monetary"}],"Scott Harris":[{"mp":"Robert Jenrick","value":5000.0,"received":"2025-11-03","type":"Monetary"}],"Mr Paul Haggar":[{"mp":"Robert Jenrick","value":10000.0,"received":"2025-10-21","type":"Monetary"}],"Attestor Limited":[{"mp":"Robert Jenrick","value":15000.0,"received":"2025-09-19","type":"Monetary"},{"mp":"Robert Jenrick","value":25000.0,"received":"2025-03-31","type":"Monetary"}],"West End Medical Practice Limited":[{"mp":"Robert Jenrick","value":10000.0,"received":"2025-08-26","type":"Monetary"}],"Fergus Hall":[{"mp":"Robert Jenrick","value":10000.0,"received":"2025-07-23","type":"Monetary"}],"Michael Cohen":[{"mp":"Robert Jenrick","value":15000.0,"received":"2025-05-29","type":"Monetary"}],"John James":[{"mp":"Robert Jenrick","value":15000.0,"received":"2025-05-08","type":"Monetary"},{"mp":"Mr Andrew Snowden","value":2500.0,"received":"2025-07-07","type":"Monetary"},{"mp":"Robbie Moore","value":2500.0,"received":"","type":"Monetary"},{"mp":"John Lamont","value":2500.0,"received":"","type":"Monetary"}],"Munish Sharma":[{"mp":"Rupert Lowe","value":2000.0,"received":"2025-06-23","type":"Monetary"}],"Christopher Newman":[{"mp":"Rupert Lowe","value":5000.0,"received":"2025-06-23","type":"Monetary"}],"David Swift":[{"mp":"Rupert Lowe","value":5000.0,"received":"2025-06-23","type":"Monetary"}],"Peter Lawery":[{"mp":"Rupert Lowe","value":5000.0,"received":"2025-06-23","type":"Monetary"}],"Laurent Sartran":[{"mp":"Rupert Lowe","value":8000.0,"received":"2025-06-23","type":"Monetary"}],"Derek Holder":[{"mp":"Rupert Lowe","value":5000.0,"received":"2025-06-23","type":"Monetary"}],"Benyamin Naeem Habib":[{"mp":"Rupert Lowe","value":5000.0,"received":"2025-06-23","type":"Monetary"}],"Margaret Hepburn":[{"mp":"Rupert Lowe","value":5000.0,"received":"2025-06-23","type":"Monetary"}],"Hepburn Bio Care Ltd":[{"mp":"Rupert Lowe","value":5000.0,"received":"2025-06-23","type":"Monetary"}],"OPD Group Ltd (a company controlled by Peter Hearn)":[{"mp":"Wes Streeting","value":55000.0,"received":"2026-01-22","type":"Monetary"},{"mp":"Wes Streeting","value":53000.0,"received":"2025-01-13","type":"Monetary"}],"Francesca Perrin":[{"mp":"Wes Streeting","value":50000.0,"received":"2025-09-04","type":"Monetary"},{"mp":"David Pinto-Duschinsky","value":30000.0,"received":"2026-01-12","type":"Monetary"},{"mp":"Josh Simons","value":30000.0,"received":"2025-10-06","type":"Monetary"},{"mp":"Bridget Phillipson","value":15000.0,"received":"2025-10-06","type":"Monetary"},{"mp":"Shabana Mahmood","value":50000.0,"received":"2025-10-02","type":"Monetary"}],"Sir Trevor Chinn":[{"mp":"David Pinto-Duschinsky","value":1250.0,"received":"2025-12-04","type":"Monetary"},{"mp":"David Pinto-Duschinsky","value":1250.0,"received":"2025-09-03","type":"Monetary"},{"mp":"David Pinto-Duschinsky","value":1250.0,"received":"2025-04-01","type":"Monetary"},{"mp":"David Pinto-Duschinsky","value":1250.0,"received":"2025-06-19","type":"Monetary"},{"mp":"Sarah Sackman","value":1250.0,"received":"","type":"Monetary"},{"mp":"Liam Byrne","value":2500.0,"received":"2025-06-16","type":"Monetary"}],"Jon Mendelsohn":[{"mp":"David Pinto-Duschinsky","value":2500.0,"received":"2025-09-08","type":"Monetary"},{"mp":"Jon Pearce","value":5000.0,"received":"2025-07-28","type":"Monetary"}],"Iain Gorman":[{"mp":"Lee Anderson","value":5000.0,"received":"","type":"Monetary"}],"Andrew Perloff":[{"mp":"Lee Anderson","value":3000.0,"received":"","type":"Monetary"}],"Gary Dutton MBE":[{"mp":"Lee Anderson","value":5000.0,"received":"2025-04-08","type":"Monetary"}],"The Refugee, Asylum and Migration Policy Project (RAMP)":[{"mp":"Tony Vaughan","value":20438.89,"received":"2025-04-01","type":"In kind"},{"mp":"Tony Vaughan","value":5561.11,"received":"2026-01-14","type":"In kind"},{"mp":"Tony Vaughan","value":3120.0,"received":"2025-01-01","type":"In kind"},{"mp":"David Simmonds","value":3250.0,"received":"2026-01-01","type":"In kind"},{"mp":"David Simmonds","value":9750.0,"received":"2025-04-01","type":"In kind"},{"mp":"David Simmonds","value":3088.0,"received":"2025-01-01","type":"In kind"},{"mp":"Olivia Blake","value":3250.0,"received":"2026-01-01","type":"In kind"},{"mp":"Olivia Blake","value":19500.0,"received":"2025-04-01","type":"In kind"},{"mp":"Olivia Blake","value":6240.0,"received":"2025-01-01","type":"In kind"}],"Eric Lonergan":[{"mp":"Yuan Yang","value":5000.0,"received":"2025-11-25","type":"Monetary"},{"mp":"Yuan Yang","value":10000.0,"received":"2025-06-16","type":"Monetary"}],"Jeremy Oppenheim":[{"mp":"Yuan Yang","value":2000.0,"received":"2025-09-07","type":"Monetary"}],"Daniel Luhde-Thompson":[{"mp":"Yuan Yang","value":10000.0,"received":"2025-07-11","type":"Monetary"},{"mp":"Gregor Poynton","value":10000.0,"received":"2025-11-10","type":"Monetary"},{"mp":"Sarah Coombes","value":10000.0,"received":"","type":"Monetary"},{"mp":"Gareth Snell","value":10000.0,"received":"2025-07-14","type":"Monetary"}],"Aziz Foundation":[{"mp":"Naz Shah","value":24930.0,"received":"","type":"In kind"}],"Strand Partners":[{"mp":"Imogen Walker","value":2000.0,"received":"2025-07-23","type":"Monetary"},{"mp":"Gregor Poynton","value":2000.0,"received":"2025-07-17","type":"Monetary"}],"SME4Labour Ltd":[{"mp":"Imogen Walker","value":1500.0,"received":"2025-06-23","type":"In kind"},{"mp":"Sonia Kumar","value":5000.0,"received":"","type":"Monetary"}],"Adam Management Holdings Ltd":[{"mp":"Jess Brown-Fuller","value":5000.0,"received":"2025-10-14","type":"Monetary"},{"mp":"Josh Babarinde","value":3500.0,"received":"","type":"Monetary"},{"mp":"Lisa Smart","value":2000.0,"received":"","type":"Monetary"}],"Cherie Robertson":[{"mp":"Jess Brown-Fuller","value":2000.0,"received":"","type":"Monetary"}],"Richard Evans":[{"mp":"Jess Brown-Fuller","value":3000.0,"received":"","type":"Monetary"}],"Anthony Smith":[{"mp":"Steff Aquarone","value":2500.0,"received":"","type":"Monetary"},{"mp":"Steff Aquarone","value":2500.0,"received":"","type":"Monetary"}],"Michael Holland":[{"mp":"Steff Aquarone","value":2000.0,"received":"","type":"Monetary"}],"The Fusion Cluster":[{"mp":"James Naish","value":1678.0,"received":"2025-11-24","type":"In kind"}],"East Wight Patrons Club":[{"mp":"Joe Robertson","value":1888.74,"received":"2025-12-14","type":"Monetary"}],"Edward Powell":[{"mp":"Pippa Heylings","value":10000.0,"received":"","type":"Monetary"}],"Strathgrove Ltd":[{"mp":"Sarah Sackman","value":2500.0,"received":"","type":"Monetary"}],"STRATHGROVE LIMITED":[{"mp":"Sarah Sackman","value":2500.0,"received":"","type":"Monetary"}],"Jonathan Conibear":[{"mp":"Calum Miller","value":5000.0,"received":"2026-02-09","type":"Monetary"}],"Nick Clegg":[{"mp":"Calum Miller","value":10000.0,"received":"","type":"Monetary"}],"Tattersalls Ltd":[{"mp":"Nick Timothy","value":25000.0,"received":"","type":"Monetary"},{"mp":"Nick Timothy","value":10000.0,"received":"","type":"Monetary"}],"Andrew Sells":[{"mp":"Nick Timothy","value":5000.0,"received":"2026-02-06","type":"Monetary"}],"Hilton Nathanson":[{"mp":"Nick Timothy","value":5000.0,"received":"2025-12-11","type":"Monetary"}],"Crowne Plaza Hotel Stratford-upon-Avon (part of IHG Hotels and Resorts group)":[{"mp":"Manuela Perteghella","value":7596.5,"received":"2026-03-02","type":"In kind"}],"Bratton Ventures Ltd":[{"mp":"Freddie van Mierlo","value":5000.0,"received":"","type":"Monetary"}],"Tom Kilroy":[{"mp":"Freddie van Mierlo","value":5000.0,"received":"","type":"Monetary"},{"mp":"Freddie van Mierlo","value":5000.0,"received":"","type":"Monetary"}],"Anthony Robertson":[{"mp":"Freddie van Mierlo","value":2500.0,"received":"","type":"Monetary"}],"International Centre of Justice for Palestinians":[{"mp":"Ayoub Khan","value":40000.0,"received":"2026-01-07","type":"In kind"}],"SME4LABOUR LTD":[{"mp":"Sonia Kumar","value":1500.0,"received":"2025-05-20","type":"Monetary"},{"mp":"Sonia Kumar","value":2000.0,"received":"2025-05-20","type":"Monetary"},{"mp":"Sonia Kumar","value":1625.0,"received":"2025-05-06","type":"Monetary"},{"mp":"Mr Hamish Falconer","value":4797.0,"received":"2026-01-21","type":"In kind"}],"Ahmed Hindawi":[{"mp":"Mr Joshua Reynolds","value":5000.0,"received":"","type":"Monetary"},{"mp":"Lisa Smart","value":5000.0,"received":"","type":"Monetary"}],"DCD Properties":[{"mp":"Dr Rosena Allin-Khan","value":5000.0,"received":"2025-09-15","type":"Monetary"}],"Waheed Alli":[{"mp":"Dr Rosena Allin-Khan","value":5000.0,"received":"2025-07-15","type":"Monetary"}],"London Hotel Group":[{"mp":"Dr Rosena Allin-Khan","value":3750.0,"received":"2025-03-20","type":"Monetary"}],"Dermot Roaf":[{"mp":"Layla Moran","value":1800.0,"received":"","type":"Monetary"},{"mp":"Layla Moran","value":1800.0,"received":"","type":"Monetary"}],"Hugo Brunner":[{"mp":"Layla Moran","value":2400.0,"received":"","type":"Monetary"},{"mp":"Layla Moran","value":1000.0,"received":"","type":"Monetary"},{"mp":"Layla Moran","value":2400.0,"received":"","type":"Monetary"}],"Peter Frankopan":[{"mp":"Layla Moran","value":2400.0,"received":"","type":"Monetary"},{"mp":"Layla Moran","value":2400.0,"received":"","type":"Monetary"}],"Elena Simpson":[{"mp":"Layla Moran","value":2000.0,"received":"","type":"Monetary"}],"Alison Wedgwood":[{"mp":"Rachel Reeves","value":30000.0,"received":"2025-10-01","type":"Monetary"}],"Trailfinders Ltd":[{"mp":"David Davis","value":250000.0,"received":"2025-06-13","type":"Monetary"}],"The Royal Society":[{"mp":"Steve Yemm","value":3051.28,"received":"2026-03-16","type":"In kind"}],"Royal Society of Chemistry":[{"mp":"Steve Yemm","value":3732.0,"received":"2025-11-12","type":"In kind"}],"Royal British Legion Trading Ltd":[{"mp":"Steve Yemm","value":3750.0,"received":"2025-06-04","type":"In kind"}],"J.C.B. SERVICE":[{"mp":"Steve Yemm","value":2000.0,"received":"2025-03-21","type":"In kind"}],"Lord (David) Sainsbury":[{"mp":"Josh MacAlister","value":20000.0,"received":"","type":"Monetary"},{"mp":"Josh MacAlister","value":20000.0,"received":"","type":"Monetary"},{"mp":"Mark Ferguson","value":20000.0,"received":"","type":"Monetary"}],"Cressida Pollock and Danny Luhde-Thompson":[{"mp":"Josh MacAlister","value":10000.0,"received":"2025-07-11","type":"Monetary"}],"Ben Kingsley":[{"mp":"Josh MacAlister","value":1900.0,"received":"2025-01-01","type":"In kind"}],"25 Seven Talent Solutions Limited":[{"mp":"Shaun Davies","value":3024.0,"received":"2026-03-11","type":"Monetary"}],"Newton":[{"mp":"Shaun Davies","value":4200.0,"received":"","type":"In kind"}],"Telford & Wrekin Labour Group of Councillors":[{"mp":"Shaun Davies","value":12000.0,"received":"","type":"Monetary"}],"European Innovation Ltd":[{"mp":"Shaun Davies","value":950.0,"received":"","type":"Monetary"},{"mp":"Shaun Davies","value":1500.0,"received":"","type":"Monetary"}],"Mail Solutions Limited":[{"mp":"Shaun Davies","value":2253.53,"received":"2025-11-04","type":"In kind"}],"GMB London Region":[{"mp":"Andrew Pakes","value":2000.0,"received":"","type":"Monetary"}],"GMB":[{"mp":"Andrew Pakes","value":2000.0,"received":"","type":"Monetary"}],"David Evans":[{"mp":"Helen Morgan","value":2000.0,"received":"","type":"Monetary"}],"Mark Petterson":[{"mp":"Helen Morgan","value":5000.0,"received":"","type":"Monetary"},{"mp":"Helen Morgan","value":5000.0,"received":"","type":"Monetary"}],"Stephen de Launey":[{"mp":"Helen Morgan","value":1000.0,"received":"","type":"Monetary"},{"mp":"Helen Morgan","value":1000.0,"received":"","type":"Monetary"},{"mp":"Helen Morgan","value":500.0,"received":"","type":"Monetary"}],"Anthony Trevor Langham":[{"mp":"Jenny Riddell-Carpenter","value":8250.0,"received":"2026-02-23","type":"In kind"},{"mp":"Jenny Riddell-Carpenter","value":8250.0,"received":"2025-08-04","type":"In kind"}],"Susan Clare Parsons":[{"mp":"Jenny Riddell-Carpenter","value":8250.0,"received":"2026-02-23","type":"In kind"},{"mp":"Jenny Riddell-Carpenter","value":8250.0,"received":"2025-08-04","type":"In kind"}],"Jerome Justin Watts":[{"mp":"Jenny Riddell-Carpenter","value":10000.0,"received":"","type":"Monetary"}],"QTS Data Centres":[{"mp":"Ian Lavery","value":7276.0,"received":"2026-02-06","type":"In kind"}],"Bradley Wickens":[{"mp":"Charlie Maynard","value":10000.0,"received":"","type":"Monetary"}],"Al Breach":[{"mp":"Charlie Maynard","value":12500.0,"received":"","type":"Monetary"}],"Alasdair Breach":[{"mp":"Charlie Maynard","value":12500.0,"received":"","type":"Monetary"},{"mp":"Charlie Maynard","value":12500.0,"received":"","type":"Monetary"},{"mp":"Charlie Maynard","value":12500.0,"received":"","type":"Monetary"}],"Giles Davies":[{"mp":"Mrs Kemi Badenoch","value":10000.0,"received":"2026-03-12","type":"Monetary"}],"RNIE Group LTD":[{"mp":"Mrs Kemi Badenoch","value":10000.0,"received":"2026-02-09","type":"Monetary"}],"James Mellon":[{"mp":"Mrs Kemi Badenoch","value":10000.0,"received":"2026-01-27","type":"Monetary"},{"mp":"Andrew Griffith","value":5000.0,"received":"2025-12-18","type":"Monetary"},{"mp":"Andrew Griffith","value":5000.0,"received":"2025-06-16","type":"Monetary"},{"mp":"Andrew Griffith","value":5000.0,"received":"2025-03-17","type":"Monetary"}],"Watt Trading Ltd":[{"mp":"Mrs Kemi Badenoch","value":10000.0,"received":"2026-01-09","type":"Monetary"}],"Charles Keymer":[{"mp":"Mrs Kemi Badenoch","value":41812.5,"received":"","type":"Monetary"}],"J.C. Bamford Excavators Ltd":[{"mp":"Mrs Kemi Badenoch","value":50000.0,"received":"","type":"Monetary"},{"mp":"Andrew Griffith","value":25000.0,"received":"","type":"Monetary"}],"J.C. Bamford Excavators Limited":[{"mp":"Mrs Kemi Badenoch","value":150000.0,"received":"2025-06-06","type":"Monetary"}],"Sir Trevor Edward Chinn":[{"mp":"Josh Simons","value":1250.0,"received":"2026-03-04","type":"Monetary"}],"Sir Trevor Edwin Chinn":[{"mp":"Josh Simons","value":1250.0,"received":"2025-10-21","type":"Monetary"},{"mp":"Josh Simons","value":1250.0,"received":"2025-12-04","type":"Monetary"}],"Michael Craven":[{"mp":"Josh Simons","value":5000.0,"received":"2025-06-04","type":"Monetary"},{"mp":"Mr Hamish Falconer","value":3000.0,"received":"","type":"Monetary"}],"The Coalition for Global Prosperity (CGP)":[{"mp":"Laura Kyrke-Smith","value":3900.0,"received":"2026-03-11","type":"In kind"}],"Refugee, Asylum and Migration Policy Project (RAMP)":[{"mp":"Laura Kyrke-Smith","value":3600.0,"received":"2025-01-01","type":"In kind"},{"mp":"Chris Murray","value":6500.0,"received":"2026-01-01","type":"In kind"},{"mp":"Chris Murray","value":13000.0,"received":"2025-09-01","type":"In kind"},{"mp":"Chris Murray","value":6500.0,"received":"2025-04-07","type":"In kind"}],"James Sleeman":[{"mp":"Munira Wilson","value":8000.0,"received":"","type":"Monetary"},{"mp":"Munira Wilson","value":12000.0,"received":"","type":"Monetary"},{"mp":"Munira Wilson","value":11520.0,"received":"","type":"Monetary"}],"Jasper Cook":[{"mp":"Munira Wilson","value":2400.0,"received":"","type":"Monetary"},{"mp":"Munira Wilson","value":2400.0,"received":"","type":"Monetary"}],"James Heath":[{"mp":"Munira Wilson","value":2400.0,"received":"","type":"Monetary"},{"mp":"Munira Wilson","value":2400.0,"received":"","type":"Monetary"}],"Orla Dunn":[{"mp":"Munira Wilson","value":5000.0,"received":"","type":"Monetary"}],"Lord Tim Clement-Jones":[{"mp":"Munira Wilson","value":3000.0,"received":"","type":"Monetary"},{"mp":"Munira Wilson","value":3000.0,"received":"","type":"Monetary"}],"Robin Brown":[{"mp":"Munira Wilson","value":10000.0,"received":"","type":"Monetary"},{"mp":"Munira Wilson","value":10000.0,"received":"","type":"Monetary"}],"Durham Group Estates":[{"mp":"Munira Wilson","value":5000.0,"received":"","type":"Monetary"}],"Dominic Christian":[{"mp":"Munira Wilson","value":10000.0,"received":"","type":"Monetary"}],"Geoffrey Geiger":[{"mp":"Munira Wilson","value":2000.0,"received":"","type":"Monetary"}],"Mike Wheatley":[{"mp":"Munira Wilson","value":1800.0,"received":"","type":"Monetary"},{"mp":"Munira Wilson","value":1800.0,"received":"","type":"Monetary"}],"Charles Fry":[{"mp":"Munira Wilson","value":10000.0,"received":"","type":"Monetary"}],"Fiona Forbes":[{"mp":"Munira Wilson","value":2463.02,"received":"2025-02-27","type":"In kind"}],"Persimmon Homes Ltd":[{"mp":"Naushabah Khan","value":5000.0,"received":"2026-03-06","type":"In kind"},{"mp":"Sir Ashley Fox","value":2000.0,"received":"2025-06-16","type":"Monetary"}],"Home For Britain Ltd":[{"mp":"Naushabah Khan","value":3000.0,"received":"","type":"Monetary"}],"Earthcott Ltd":[{"mp":"Joani Reid","value":2400.0,"received":"2026-02-12","type":"In kind"}],"Mundev Wouhra":[{"mp":"Kanishka Narayan","value":10000.0,"received":"2026-02-06","type":"Monetary"},{"mp":"Kanishka Narayan","value":10000.0,"received":"2025-12-06","type":"Monetary"}],"India Legal Services Limited":[{"mp":"Kanishka Narayan","value":4000.0,"received":"2025-07-11","type":"Monetary"}],"Jerome Betts":[{"mp":"Steve Darling","value":2500.0,"received":"","type":"Monetary"},{"mp":"Steve Darling","value":2000.0,"received":"2025-09-19","type":"Monetary"}],"Alan Morton":[{"mp":"Josh Babarinde","value":20000.0,"received":"","type":"Monetary"}],"Adam Management Holdings Limited":[{"mp":"Josh Babarinde","value":7500.0,"received":"","type":"Monetary"}],"Ian Wrigglesworth":[{"mp":"Josh Babarinde","value":2000.0,"received":"","type":"Monetary"}],"Tratos UK Limited":[{"mp":"Alberto Costa","value":4276.56,"received":"","type":"Monetary"},{"mp":"Alberto Costa","value":4276.55,"received":"","type":"Monetary"}],"Michael Fry":[{"mp":"Alberto Costa","value":1800.0,"received":"2025-09-14","type":"In kind"}],"Mr George McGowan":[{"mp":"Dan Tomlinson","value":3000.0,"received":"","type":"Monetary"}],"Selvanayagam Pankayachelvan":[{"mp":"Katie Lam","value":7000.0,"received":"2026-02-26","type":"Monetary"},{"mp":"Katie Lam","value":7000.0,"received":"2025-11-14","type":"Monetary"}],"The Knole Club":[{"mp":"Katie Lam","value":5000.0,"received":"2025-03-25","type":"Monetary"}],"Community Union":[{"mp":"Gregor Poynton","value":1000.0,"received":"2026-02-10","type":"Monetary"}],"SME4Labour LTD":[{"mp":"Gregor Poynton","value":1500.0,"received":"2025-06-23","type":"In kind"}],"Kevin Craig":[{"mp":"Olivia Bailey","value":2000.0,"received":"","type":"Monetary"}],"Linda Riley":[{"mp":"Olivia Bailey","value":5000.0,"received":"","type":"Monetary"}],"Unison South East":[{"mp":"Olivia Bailey","value":1900.0,"received":"","type":"Monetary"}],"Edward Sells":[{"mp":"Helen Whately","value":10000.0,"received":"","type":"Monetary"}],"Edward Garton Woods":[{"mp":"Helen Whately","value":5000.0,"received":"","type":"Monetary"}],"Lord (Stanley) Fink":[{"mp":"Helen Whately","value":5000.0,"received":"","type":"Monetary"}],"Richard Oldfield":[{"mp":"Helen Whately","value":7500.0,"received":"","type":"Monetary"}],"Richard Chesson":[{"mp":"Helen Whately","value":2450.0,"received":"2025-04-25","type":"In kind"}],"UNISON":[{"mp":"Helena Dollimore","value":1500.0,"received":"","type":"Monetary"},{"mp":"Liz Twist","value":2000.0,"received":"","type":"Monetary"},{"mp":"Mark Ferguson","value":2000.0,"received":"","type":"Monetary"},{"mp":"Mark Ferguson","value":900.0,"received":"2025-09-29","type":"In kind"},{"mp":"Mark Ferguson","value":2050.0,"received":"","type":"In kind"},{"mp":"Simon Lightwood","value":2000.0,"received":"2025-12-12","type":"Monetary"}],"GMB Southern Region":[{"mp":"Helena Dollimore","value":6600.0,"received":"2025-11-07","type":"In kind"}],"Barry Hearn OBE":[{"mp":"Andrew Rosindell","value":10000.0,"received":"2026-02-13","type":"Monetary"},{"mp":"Andrew Rosindell","value":5000.0,"received":"2025-09-24","type":"Monetary"}],"Ebury Court Residential Care":[{"mp":"Andrew Rosindell","value":3000.0,"received":"2025-12-12","type":"Monetary"}],"The Lord Glendonrbook":[{"mp":"Andrew Rosindell","value":1500.0,"received":"2025-09-29","type":"Monetary"}],"Nealade Limited":[{"mp":"Andrew Rosindell","value":5000.0,"received":"2025-09-22","type":"Monetary"}],"Ebury Court Care Home":[{"mp":"Andrew Rosindell","value":2000.0,"received":"","type":"Monetary"}],"Gary Lubner":[{"mp":"Miatta Fahnbulleh","value":28500.0,"received":"2026-01-30","type":"Monetary"}],"Ewan Kirk":[{"mp":"Daisy Cooper","value":10000.0,"received":"","type":"Monetary"}],"Thomas Gosling":[{"mp":"Daisy Cooper","value":10000.0,"received":"","type":"Monetary"}],"College Street Partners Ltd":[{"mp":"Daisy Cooper","value":20000.0,"received":"","type":"Monetary"}],"Ahmed Hindawi and Nagwa Abdelmottaleb":[{"mp":"Daisy Cooper","value":10000.0,"received":"","type":"Monetary"}],"Tushar Prabhu":[{"mp":"Daisy Cooper","value":5000.0,"received":"","type":"Monetary"}],"Chris White":[{"mp":"Daisy Cooper","value":2500.0,"received":"","type":"Monetary"}],"Elizabeth Desmond":[{"mp":"Daisy Cooper","value":5000.0,"received":"","type":"Monetary"},{"mp":"Lisa Smart","value":3000.0,"received":"","type":"Monetary"}],"Matthew and Pippa Oakeshott":[{"mp":"Daisy Cooper","value":50000.0,"received":"","type":"Monetary"}],"Julian Taylor":[{"mp":"Daisy Cooper","value":2000.0,"received":"","type":"Monetary"}],"Homes for Britain Ltd":[{"mp":"Kevin McKenna","value":2200.0,"received":"2026-01-22","type":"Monetary"},{"mp":"Kevin McKenna","value":2800.0,"received":"2025-06-18","type":"In kind"},{"mp":"Mike Reader","value":2155.0,"received":"","type":"Monetary"},{"mp":"Andrew Western","value":5000.0,"received":"2025-06-18","type":"In kind"}],"Paul Beck":[{"mp":"Jack Rankin","value":3000.0,"received":"","type":"Monetary"}],"Dominic J Brisby":[{"mp":"Jack Rankin","value":2000.0,"received":"2025-12-22","type":"Monetary"}],"Mrs Barbara Hilton":[{"mp":"Jack Rankin","value":5000.0,"received":"2025-08-30","type":"Monetary"},{"mp":"Jack Rankin","value":2000.0,"received":"","type":"Monetary"}],"Leonard and Judith Licht":[{"mp":"Jack Rankin","value":30000.0,"received":"2025-07-01","type":"Monetary"}],"IPGL Limited":[{"mp":"Sir Mel Stride","value":2000.0,"received":"2026-01-21","type":"Monetary"},{"mp":"Sir Mel Stride","value":25000.0,"received":"","type":"Monetary"},{"mp":"Claire Coutinho","value":5000.0,"received":"","type":"Monetary"}],"Susan Green":[{"mp":"Sir Mel Stride","value":2000.0,"received":"2026-01-21","type":"Monetary"}],"J. C. Bamford Excavators Limited":[{"mp":"Sir Mel Stride","value":25000.0,"received":"","type":"Monetary"},{"mp":"Sir Mel Stride","value":25000.0,"received":"","type":"Monetary"}],"Alan Montomery":[{"mp":"Alex Brewer","value":2511.0,"received":"","type":"Monetary"}],"Alan Montgomery":[{"mp":"Alex Brewer","value":2500.0,"received":"","type":"Monetary"}],"Lucy Greenwood":[{"mp":"Alex Brewer","value":2000.0,"received":"","type":"Monetary"},{"mp":"Alex Brewer","value":5000.0,"received":"","type":"Monetary"}],"Patrick Foster":[{"mp":"Alex Brewer","value":5600.0,"received":"","type":"Monetary"}],"Reeten Banerji":[{"mp":"Helen Maguire","value":3000.0,"received":"","type":"Monetary"}],"Bridget Kendrick":[{"mp":"Helen Maguire","value":5000.0,"received":"","type":"Monetary"}],"The British Society for Antimicrobial Chemotherapy":[{"mp":"Dr Beccy Cooper","value":10158.72,"received":"2025-10-06","type":"In kind"},{"mp":"Dr Danny Chambers","value":2222.22,"received":"2025-10-06","type":"In kind"}],"Mr Philip Rimmer":[{"mp":"Aphra Brandreth","value":2060.12,"received":"","type":"Monetary"}],"D-Tec International":[{"mp":"Mr Andrew Snowden","value":2500.0,"received":"2026-02-03","type":"Monetary"}],"Colin Shenton":[{"mp":"Mr Andrew Snowden","value":1500.0,"received":"2025-11-09","type":"Monetary"},{"mp":"Mr Andrew Snowden","value":1500.0,"received":"2025-02-05","type":"Monetary"}],"Fox Brothers":[{"mp":"Mr Andrew Snowden","value":2500.0,"received":"2025-09-17","type":"Monetary"}],"Tim Hewens":[{"mp":"Monica Harding","value":750.0,"received":"","type":"Monetary"},{"mp":"Monica Harding","value":750.0,"received":"","type":"Monetary"},{"mp":"Monica Harding","value":2350.0,"received":"","type":"In kind"}],"Mark Brett":[{"mp":"Monica Harding","value":20000.0,"received":"","type":"Monetary"}],"Kirsty Hewens":[{"mp":"Monica Harding","value":750.0,"received":"","type":"Monetary"},{"mp":"Monica Harding","value":1500.0,"received":"","type":"Monetary"}],"Tim Hewins":[{"mp":"Monica Harding","value":3747.0,"received":"","type":"In kind"}],"Social Workers Union (SWU) and British Association of Social Workers (BASW)":[{"mp":"Ian Byrne","value":4868.12,"received":"2025-10-21","type":"In kind"}],"Key Cities (Network)":[{"mp":"Rebecca Long Bailey","value":1667.0,"received":"2026-01-05","type":"In kind"}],"Bakers, Food and Allied Workers Union":[{"mp":"Rebecca Long Bailey","value":19440.0,"received":"2025-10-30","type":"In kind"},{"mp":"Rebecca Long Bailey","value":18516.0,"received":"2024-10-29","type":"In kind"}],"National Union of Journalists":[{"mp":"Rebecca Long Bailey","value":19606.0,"received":"2025-10-22","type":"In kind"}],"National Union of Journalists (NUJ)":[{"mp":"Rebecca Long Bailey","value":18672.0,"received":"2024-04-01","type":"In kind"},{"mp":"Grahame Morris","value":18672.0,"received":"2024-04-01","type":"In kind"}],"Estates UK":[{"mp":"Martin Vickers","value":1510.41,"received":"2026-01-06","type":"Monetary"}],"International Centre of Justice for Palestinians (ICJP)":[{"mp":"Iqbal Mohamed","value":40000.0,"received":"2026-01-07","type":"In kind"}],"Bansols Beta Ltd":[{"mp":"Dr Ben Spencer","value":10000.0,"received":"","type":"Monetary"}],"Carol and Clive Chase":[{"mp":"Dr Ben Spencer","value":6000.0,"received":"","type":"Monetary"}],"James Stewart":[{"mp":"David Mundell","value":6000.0,"received":"2026-01-26","type":"Monetary"},{"mp":"David Mundell","value":3500.0,"received":"2025-07-14","type":"Monetary"}],"Barking and Dagenham College":[{"mp":"Margaret Mullane","value":750.0,"received":"2026-01-23","type":"In kind"}],"CEME":[{"mp":"Margaret Mullane","value":2100.0,"received":"2025-07-04","type":"In kind"}],"UCL Pearl":[{"mp":"Margaret Mullane","value":16170.31,"received":"2025-03-14","type":"In kind"}],"Ian Howard":[{"mp":"Alison Bennett","value":5000.0,"received":"","type":"Monetary"}],"Playscan Limited":[{"mp":"Lucy Powell","value":50000.0,"received":"","type":"Monetary"}],"Theodore Caplan":[{"mp":"Lucy Powell","value":5000.0,"received":"2025-10-16","type":"Monetary"}],"Ivy Business Centre Ltd":[{"mp":"Lucy Powell","value":10000.0,"received":"2025-10-10","type":"Monetary"}],"Small Axe Communications Ltd":[{"mp":"Lucy Powell","value":20000.0,"received":"2025-09-29","type":"In kind"}],"Sean Wadsworth":[{"mp":"Lucy Powell","value":6000.0,"received":"2025-09-15","type":"Monetary"}],"Ecotricity Group Ltd":[{"mp":"Lucy Powell","value":15000.0,"received":"2025-09-24","type":"Monetary"}],"Martin Taylor":[{"mp":"Lucy Powell","value":10000.0,"received":"2025-09-24","type":"Monetary"}],"Brecon & Radnorshire Lib Dem 49 Club":[{"mp":"David Chadwick","value":4100.0,"received":"","type":"Monetary"}],"Michael Watson":[{"mp":"David Chadwick","value":1600.0,"received":"","type":"Monetary"}],"Adam Management Holdings":[{"mp":"David Chadwick","value":3750.0,"received":"","type":"Monetary"}],"Neil Hudgell Limited":[{"mp":"Karl Turner","value":3000.0,"received":"2026-01-10","type":"In kind"}],"University and College Union":[{"mp":"Rachael Maskell","value":25187.0,"received":"","type":"Monetary"}],"Patrick H Foster":[{"mp":"Wendy Chamberlain","value":12000.0,"received":"","type":"Monetary"},{"mp":"Wendy Chamberlain","value":2400.0,"received":"","type":"Monetary"}],"Claire Enders":[{"mp":"Wendy Chamberlain","value":15000.0,"received":"","type":"Monetary"}],"Allison Wren":[{"mp":"Victoria Collins","value":5000.0,"received":"","type":"Monetary"}],"Bridget Fox":[{"mp":"Victoria Collins","value":1773.6,"received":"","type":"In kind"}],"John Cooper":[{"mp":"Victoria Collins","value":10000.0,"received":"","type":"Monetary"}],"Best for Britain Ltd":[{"mp":"Andrew Lewin","value":35332.32,"received":"2026-01-01","type":"In kind"},{"mp":"Andrew Lewin","value":2481.9,"received":"2025-11-06","type":"In kind"},{"mp":"Andrew Lewin","value":33542.32,"received":"2025-07-01","type":"In kind"},{"mp":"Andrew Lewin","value":25608.13,"received":"2025-01-01","type":"In kind"}],"Best for Britain Limited":[{"mp":"Andrew Lewin","value":34469.82,"received":"2025-10-01","type":"In kind"},{"mp":"Andrew Lewin","value":32962.28,"received":"2025-04-01","type":"In kind"}],"Nicholas McCowan":[{"mp":"Andrew Lewin","value":2000.0,"received":"","type":"Monetary"}],"Richardson Enterprises Ltd":[{"mp":"Andrew Griffith","value":5000.0,"received":"2025-11-28","type":"Monetary"}],"Unison":[{"mp":"Keir Mather","value":2000.0,"received":"2025-12-24","type":"Monetary"}],"Zero Hour Ltd":[{"mp":"Olivia Blake","value":9147.0,"received":"2025-07-15","type":"In kind"}],"OPD Group Ltd":[{"mp":"Dan Jarvis","value":15000.0,"received":"2025-12-11","type":"Monetary"},{"mp":"Dan Jarvis","value":15000.0,"received":"2025-05-21","type":"Monetary"}],"George James McGowan":[{"mp":"Gordon McKee","value":3000.0,"received":"2025-12-05","type":"Monetary"}],"Southwark Cathedral":[{"mp":"Neil Coyle","value":6660.0,"received":"2025-12-08","type":"In kind"}],"Sunil Gupta":[{"mp":"Neil Coyle","value":2500.0,"received":"2025-10-13","type":"In kind"}],"UKREiiF (The UK's Real Estate Investment and Infrastructure Forum)":[{"mp":"Simon Lightwood","value":950.0,"received":"","type":"Monetary"}],"Coca Cola Europacific Partners":[{"mp":"Simon Lightwood","value":5000.0,"received":"","type":"Monetary"}],"The Fire Brigades Union (FBU)":[{"mp":"Navendu Mishra","value":1918.21,"received":"2025-12-08","type":"Monetary"}],"Mr Abdul Sattar Shere-Mohammod (known as Shere M Sattar)":[{"mp":"Stephen Morgan","value":5000.0,"received":"","type":"Monetary"},{"mp":"Stephen Morgan","value":5000.0,"received":"","type":"Monetary"}],"Mr Adbul Sattar Shere-Mohammod (known as Shere M Sattar)":[{"mp":"Stephen Morgan","value":5000.0,"received":"","type":"Monetary"}],"Robert Harding":[{"mp":"Robbie Moore","value":5000.0,"received":"","type":"Monetary"}],"Marco Compagnoni":[{"mp":"Robbie Moore","value":5000.0,"received":"","type":"Monetary"},{"mp":"John Lamont","value":5000.0,"received":"","type":"Monetary"}],"David Sainsbury":[{"mp":"Joe Powell","value":26827.06,"received":"","type":"Monetary"},{"mp":"Joe Powell","value":22013.49,"received":"","type":"Monetary"}],"Betterworld Limited":[{"mp":"Joe Powell","value":12500.0,"received":"2025-04-10","type":"Monetary"}],"Rob Harding":[{"mp":"John Lamont","value":5000.0,"received":"","type":"Monetary"}],"Ian McVeigh":[{"mp":"John Lamont","value":10000.0,"received":"","type":"Monetary"}],"P Investments Limited":[{"mp":"Saqib Bhatti","value":20000.0,"received":"","type":"Monetary"}],"Dukehill Services Limited":[{"mp":"Saqib Bhatti","value":5000.0,"received":"","type":"Monetary"}],"Penpole Events Limited":[{"mp":"Darren Jones","value":2820.0,"received":"2025-11-08","type":"In kind"}],"Lord David Sainsbury of Turville":[{"mp":"Darren Jones","value":44400.0,"received":"2025-09-26","type":"Monetary"}],"Hilary Stone":[{"mp":"Lisa Smart","value":2500.0,"received":"","type":"Monetary"},{"mp":"Lisa Smart","value":2000.0,"received":"","type":"Monetary"}],"Godfrey Coaching Ltd":[{"mp":"Natalie Fleet","value":7200.0,"received":"2025-10-03","type":"In kind"},{"mp":"Natalie Fleet","value":8500.0,"received":"2024-10-02","type":"In kind"}],"Julian Dunkerton":[{"mp":"Max Wilkinson","value":5000.0,"received":"","type":"Monetary"}],"Jim Murphy":[{"mp":"Bridget Phillipson","value":10000.0,"received":"2025-10-16","type":"Monetary"}],"89Up Ltd":[{"mp":"Bridget Phillipson","value":1500.0,"received":"2025-10-04","type":"In kind"}],"Baron Sainsbury of Turville (David Sainsbury)":[{"mp":"Bridget Phillipson","value":20000.0,"received":"2025-10-03","type":"Monetary"}],"Baron Sainsbury of Turville (David Sainsbury )":[{"mp":"Bridget Phillipson","value":20000.0,"received":"2025-10-17","type":"Monetary"}],"Fast Foster & Company Ltd":[{"mp":"Bridget Phillipson","value":2000.0,"received":"2025-10-14","type":"Monetary"}],"Iain Simpson":[{"mp":"Bridget Phillipson","value":5000.0,"received":"2025-10-07","type":"Monetary"}],"Labour First":[{"mp":"Bridget Phillipson","value":3923.0,"received":"2025-10-06","type":"In kind"}],"Paul Callaghan":[{"mp":"Bridget Phillipson","value":6000.0,"received":"2025-09-12","type":"In kind"},{"mp":"Bridget Phillipson","value":4000.0,"received":"2025-09-12","type":"In kind"}],"89up Ltd":[{"mp":"Bridget Phillipson","value":5268.97,"received":"2025-09-11","type":"In kind"}],"Culture Quarter Ventures Ltd":[{"mp":"Bridget Phillipson","value":1531.2,"received":"2025-09-13","type":"In kind"}],"The Prison Officers Association":[{"mp":"Liz Saville Roberts","value":5670.0,"received":"2025-10-01","type":"In kind"},{"mp":"Liz Saville Roberts","value":3780.0,"received":"2025-01-01","type":"In kind"}],"University and College Union (UCU)":[{"mp":"Liz Saville Roberts","value":3780.0,"received":"2025-01-01","type":"In kind"},{"mp":"Liz Saville Roberts","value":5670.0,"received":"2025-10-01","type":"In kind"}],"NAPO - the Probation and Family Courts Union":[{"mp":"Liz Saville Roberts","value":3780.0,"received":"2025-01-01","type":"In kind"},{"mp":"Liz Saville Roberts","value":5670.0,"received":"2025-10-01","type":"In kind"}],"Public and Commercial Services Union":[{"mp":"Liz Saville Roberts","value":5670.0,"received":"2025-10-01","type":"In kind"},{"mp":"Liz Saville Roberts","value":3780.0,"received":"2025-01-01","type":"In kind"}],"The Police Federation":[{"mp":"Liz Saville Roberts","value":5670.0,"received":"2025-10-01","type":"In kind"},{"mp":"Liz Saville Roberts","value":3780.0,"received":"2025-01-01","type":"In kind"}],"Lawrence Eke":[{"mp":"Peter Kyle","value":5000.0,"received":"2025-10-21","type":"In kind"}],"Rail, Maritime and Transport Union":[{"mp":"John McDonnell","value":25091.0,"received":"","type":"In kind"},{"mp":"John McDonnell","value":22211.0,"received":"","type":"In kind"}],"Public and Commercial Services Union (PCS)":[{"mp":"John McDonnell","value":36077.0,"received":"","type":"In kind"},{"mp":"John McDonnell","value":34358.0,"received":"","type":"In kind"}],"Anthony George Watson":[{"mp":"Oliver Ryan","value":4600.0,"received":"2025-10-17","type":"Monetary"}],"Labour Animal Welfare Society":[{"mp":"Ruth Jones","value":1660.08,"received":"2025-10-15","type":"In kind"}],"Andrew Dawber":[{"mp":"Mr Louie French","value":5000.0,"received":"","type":"Monetary"}],"The YIMBY Initiative Ltd":[{"mp":"Chris Curtis","value":5666.66,"received":"2025-09-25","type":"In kind"},{"mp":"Chris Curtis","value":5666.66,"received":"2025-06-27","type":"In kind"},{"mp":"Lola McEvoy","value":2833.33,"received":"2025-07-26","type":"In kind"},{"mp":"Lola McEvoy","value":5666.66,"received":"2025-06-27","type":"In kind"}],"The Yimby Initiative Ltd":[{"mp":"Chris Curtis","value":2833.33,"received":"2025-08-29","type":"In kind"}],"National Liberal Club":[{"mp":"Anna Sabine","value":1552.86,"received":"2024-08-14","type":"In kind"}],"Dr Sarah Ingham":[{"mp":"James Cartlidge","value":2005.9,"received":"","type":"In kind"},{"mp":"James Cartlidge","value":5000.0,"received":"","type":"Monetary"}],"James Uffindell":[{"mp":"James Cartlidge","value":5000.0,"received":"","type":"Monetary"}],"BCP Unison Branch":[{"mp":"Neil Duncan-Jordan","value":2000.0,"received":"2025-09-12","type":"Monetary"}],"Global Foods (Birmingham) Limited":[{"mp":"Shabana Mahmood","value":2500.0,"received":"2025-08-08","type":"Monetary"}],"Andeep Mangal":[{"mp":"Shabana Mahmood","value":2500.0,"received":"2025-07-17","type":"Monetary"}],"Manjit Jhooty":[{"mp":"Shabana Mahmood","value":2500.0,"received":"2025-07-10","type":"Monetary"}],"Mr Trevor Chinn":[{"mp":"Jon Pearce","value":1250.0,"received":"2025-06-19","type":"Monetary"}],"Mark Adlestone":[{"mp":"Jon Pearce","value":2500.0,"received":"2025-06-26","type":"Monetary"}],"Breedon Group plc":[{"mp":"Jon Pearce","value":2500.0,"received":"2025-04-29","type":"Monetary"}],"Harish Sodha":[{"mp":"Tim Roca","value":20000.0,"received":"2025-08-20","type":"Monetary"}],"Mr Harish Sodha":[{"mp":"Tim Roca","value":5000.0,"received":"2025-03-17","type":"Monetary"}],"Communication Workers Union":[{"mp":"Lisa Nandy","value":2000.04,"received":"","type":"Monetary"}],"Steve Webb":[{"mp":"Claire Young","value":5000.0,"received":"","type":"Monetary"}],"Julia Davies":[{"mp":"Jessica Toale","value":1759.52,"received":"2025-08-09","type":"In kind"}],"Neural Voice AI":[{"mp":"Mark Sewards","value":3000.0,"received":"2025-08-05","type":"In kind"}],"BJD (GB) Ltd":[{"mp":"Baggy Shanker","value":5000.0,"received":"","type":"Monetary"}],"The Associated Society of Locomotive Engineers and Firemen (ASLEF)":[{"mp":"Kate Osborne","value":2000.0,"received":"2025-08-18","type":"Monetary"}],"Babcock International":[{"mp":"Luke Pollard","value":376.8,"received":"2025-07-24","type":"In kind"}],"University of Plymouth":[{"mp":"Luke Pollard","value":1788.0,"received":"2025-07-24","type":"In kind"}],"L Bennett and Son Ltd":[{"mp":"Rebecca Harris","value":3650.0,"received":"2025-07-01","type":"Monetary"}],"John Perry":[{"mp":"Harpreet Uppal","value":1766.29,"received":"2025-07-14","type":"Monetary"}],"Tritax Big Box REIT plc":[{"mp":"Jo White","value":5000.0,"received":"2025-07-16","type":"Monetary"}],"Bawtry Farms Ltd":[{"mp":"Jo White","value":5000.0,"received":"2025-07-02","type":"Monetary"}],"Palace Yard Events Ltd":[{"mp":"Jo White","value":32000.0,"received":"2025-06-11","type":"In kind"}],"L. Bennett & Son Limited":[{"mp":"Mr Gagan Mohindra","value":3790.99,"received":"","type":"In kind"}],"Google UK Ltd":[{"mp":"Dan Aldridge","value":2908.02,"received":"2025-06-27","type":"In kind"},{"mp":"Leigh Ingham","value":2908.02,"received":"2025-06-27","type":"In kind"}],"Kelliher Insurance Group":[{"mp":"Wendy Morton","value":5000.0,"received":"","type":"Monetary"}],"Oscar Mayer Limited":[{"mp":"Ms Abena Oppong-Asare","value":2000.0,"received":"2025-06-03","type":"Monetary"}],"Nirvana Spa & Leisure ltd":[{"mp":"Clive Jones","value":3000.0,"received":"","type":"Monetary"}],"Sonali Siriwardena":[{"mp":"Tom Rutland","value":2500.0,"received":"2025-04-11","type":"Monetary"}],"Dignity in Dying":[{"mp":"Kim Leadbeater","value":744.36,"received":"2025-03-31","type":"In kind"}],"Margaret Sharp":[{"mp":"Z\u00f6e Franklin","value":2000.0,"received":"","type":"Monetary"}],"Faith in Public Ltd":[{"mp":"Tim Farron","value":30119.08,"received":"2025-04-01","type":"In kind"},{"mp":"Tim Farron","value":15264.0,"received":"2025-03-01","type":"In kind"},{"mp":"Tim Farron","value":13877.33,"received":"2024-09-16","type":"In kind"},{"mp":"Tim Farron","value":30744.51,"received":"2024-04-01","type":"In kind"}],"Refugee, Asylum & Migration Policy Project (RAMP)":[{"mp":"Tim Farron","value":9750.0,"received":"2025-04-01","type":"In kind"},{"mp":"Tim Farron","value":3120.0,"received":"2025-01-01","type":"In kind"}],"Linda Christmas":[{"mp":"Sarah Olney","value":2000.0,"received":"","type":"Monetary"}],"The Joseph Rowntree Reform Trust":[{"mp":"Bobby Dean","value":1000.0,"received":"","type":"Monetary"}],"Chris Hayman":[{"mp":"Alison Griffiths","value":2000.0,"received":"2025-03-06","type":"Monetary"}],"White Rose Visas Ltd":[{"mp":"Si\u00e2n Berry","value":3300.0,"received":"","type":"In kind"}],"National Liberal  Club":[{"mp":"Susan Murray","value":1552.86,"received":"2024-08-14","type":"In kind"}],"Guildford Labour Party":[{"mp":"Matt Rodda","value":3675.0,"received":"","type":"In kind"}],"Communications Workers' Union":[{"mp":"Jon Trickett","value":2000.0,"received":"","type":"Monetary"}]};</script>
 <script>
-var currentTab = 'name';
 var selectedName = null;
 var allNames = [];
 
@@ -269,7 +126,6 @@ window.addEventListener('load', function() {
 });
 
 document.getElementById('searchInput').addEventListener('input', function() {
-  selectedName = null;
   renderAutocomplete(this.value.trim());
 });
 
@@ -281,6 +137,10 @@ document.getElementById('searchInput').addEventListener('keydown', function(e) {
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.search-box')) hideAC();
 });
+
+function isPostcode(val) {
+  return /^[A-Z]{1,2}[0-9][0-9A-Z]?\s*[0-9][A-Z]{2}$/i.test(val.trim());
+}
 
 function renderAutocomplete(val) {
   var list = document.getElementById('autocompleteList');
@@ -314,33 +174,6 @@ function esc(s) {
   return d.innerHTML;
 }
 
-function escAttrJs(s) {
-  return String(s || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-}
-
-function toggleSection(id, btn) {
-  var el = document.getElementById('hidden-' + id);
-  if (!el) return;
-  if (el.style.display === 'none') {
-    el.style.display = 'block';
-    btn.textContent = 'Show less';
-  } else {
-    el.style.display = 'none';
-    btn.textContent = btn.textContent.replace('Show less', 'Show more');
-  }
-}
-
-function toggleDonor(id) {
-  var panel = document.getElementById(id);
-  if (!panel) return;
-  if (panel.style.display === 'none') {
-    panel.style.display = 'block';
-  } else {
-    panel.style.display = 'none';
-  }
-}
-
-
 function fmt(val) {
   if (!val || val === 0) return '';
   return '\u00a3' + Number(val).toLocaleString('en-GB', { maximumFractionDigits: 0 });
@@ -356,28 +189,10 @@ function fmtDate(d) {
 
 function setResults(html) {
   document.getElementById('results').innerHTML = html;
-  var intro = document.getElementById('intro-content');
-  if (intro) intro.style.display = html ? 'none' : '';
 }
 
 function showError(msg) {
   setResults('<div class="status status-error">' + esc(msg) + '</div>');
-}
-
-function isPostcode(val) {
-  return /^[A-Z]{1,2}[0-9][0-9A-Z]?\s*[0-9][A-Z]{2}$/i.test(val.trim());
-}
-
-function doSearch() {
-  var val = document.getElementById('searchInput').value.trim();
-  if (!val) return;
-
-  // Auto-detect postcode vs name
-  if (isPostcode(val)) {
-    doPostcodeLookup(val);
-  } else {
-    doNameSearch(val);
-  }
 }
 
 function doNameSearch(val) {
@@ -396,6 +211,17 @@ function doNameSearch(val) {
   showError('No MP found matching "' + val + '". Try entering your postcode instead.');
 }
 
+function doSearch() {
+  var val = document.getElementById('searchInput').value.trim();
+  if (!val) return;
+  selectedName = null;
+  if (isPostcode(val)) {
+    doPostcodeLookup(val);
+  } else {
+    doNameSearch(val);
+  }
+}
+
 function doPostcodeLookup(val) {
   var btn = document.getElementById('searchBtn');
   btn.disabled = true;
@@ -404,35 +230,50 @@ function doPostcodeLookup(val) {
 
   var postcode = val.replace(/\s+/g, '').toUpperCase();
 
-  // Use TheyWorkForYou API - most reliable postcode->MP lookup
-  fetch('https://www.theyworkforyou.com/api/getMP?postcode=' + encodeURIComponent(postcode) + '&output=js')
+  fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(postcode))
     .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.error) { throw new Error('Could not find an MP for that postcode. Please check it and try again.'); }
-      var mpName = data.full_name;
-      var constituency = data.constituency;
-      if (!mpName) { throw new Error('No MP found for that postcode.'); }
+    .then(function(pcData) {
+      if (!pcData.result) { throw new Error('That postcode does not look right. Please try again.'); }
+      var constituency = pcData.result.parliamentary_constituency_2024 || pcData.result.parliamentary_constituency;
+      if (!constituency) { throw new Error('Could not find a constituency for that postcode.'); }
 
-      var stripped = mpName.replace(/^(Sir|Dame|Dr|Mr|Mrs|Ms|Miss|Lord|Lady)\s+/i, '').toLowerCase();
+      return fetch('https://members-api.parliament.uk/api/Members/Search?constituency=' + encodeURIComponent(constituency) + '&IsCurrentMember=true')
+        .then(function(r) { return r.json(); })
+        .then(function(mpJson) {
+          var members = mpJson.items || [];
+          if (!members.length) { throw new Error('No current MP found for ' + constituency + '.'); }
+          return { mpName: members[0].value.nameDisplayAs, constituency: constituency };
+        });
+    })
+    .then(function(res) {
+      var mpName = res.mpName;
+      var constituency = res.constituency;
+      var lower = mpName.toLowerCase();
       var match = null;
 
+      // Exact match
       for (var i = 0; i < allNames.length; i++) {
-        var ns = allNames[i].replace(/^(Sir|Dame|Dr|Mr|Mrs|Ms|Miss|Lord|Lady)\s+/i, '').toLowerCase();
-        if (ns === stripped || allNames[i].toLowerCase() === mpName.toLowerCase()) { match = allNames[i]; break; }
+        if (allNames[i].toLowerCase() === lower) { match = allNames[i]; break; }
       }
+      // Last name match
       if (!match) {
-        var lastName = stripped.split(' ').pop();
+        var lastName = mpName.split(' ').pop().toLowerCase();
         if (lastName.length > 3) {
           for (var i = 0; i < allNames.length; i++) {
             if (allNames[i].toLowerCase().indexOf(lastName) !== -1) { match = allNames[i]; break; }
           }
         }
       }
+      // All parts match
       if (!match) {
-        var parts = stripped.split(' ').filter(function(p) { return p.length > 2; });
+        var parts = mpName.toLowerCase().split(' ').filter(function(p) { return p.length > 2; });
         for (var i = 0; i < allNames.length; i++) {
           var nl = allNames[i].toLowerCase();
-          if (parts.every(function(p) { return nl.indexOf(p) !== -1; })) { match = allNames[i]; break; }
+          var allMatch = true;
+          for (var j = 0; j < parts.length; j++) {
+            if (nl.indexOf(parts[j]) === -1) { allMatch = false; break; }
+          }
+          if (allMatch) { match = allNames[i]; break; }
         }
       }
 
@@ -443,14 +284,14 @@ function doPostcodeLookup(val) {
           '<div class="mp-header">' +
           '<p class="mp-label">Your MP &mdash; ' + esc(constituency) + '</p>' +
           '<h2 class="mp-name">' + esc(mpName) + '</h2>' +
-          '<p class="mp-meta"></p>' +
+          '<p class="mp-meta">Register of Members\' Financial Interests &mdash; March 2026</p>' +
           '</div>' +
-          '<div class="status">' + esc(mpName) + ' has no declared interests on record.</div>'
+          '<div class="status">' + esc(mpName) + ' has no entries in the current register. They may be newly elected or have nothing to declare.</div>'
         );
       }
     })
     .catch(function(err) {
-      showError(err.message || 'Could not look up that postcode. Try searching by your MP\'s name instead.');
+      showError(err.message || 'Something went wrong. Try searching by name instead.');
     })
     .finally(function() {
       btn.disabled = false;
@@ -459,46 +300,163 @@ function doPostcodeLookup(val) {
 }
 
 
-function extractVal(item) {
-  if (item.value && item.value > 0) return item.value;
-  var m = (item.summary || item.description || '').match(/£([\d,]+(?:\.\d+)?)/);
-  return m ? parseFloat(m[1].replace(/,/g,'')) : 0;
-}
-
 function extractDonor(text) {
   if (!text) return '';
   var m = text.match(/Name of donor:\s*([^\r\n]+?)(?:\s{2,}|Address of donor)/i);
   if (m) return m[1].trim();
   var m2 = text.match(/^([^\-\r\n£]+?)\s*-\s*£/);
   if (m2) return m2[1].trim();
-  var m3 = text.match(/^([^\r\n£]+?)\s*-\s*£[\d,.]+/);
-  if (m3) return m3[1].trim();
   return '';
 }
 
-
-function sortByDate(items, dateField) {
-  return items.slice().sort(function(a, b) {
-    var da = a[dateField] || a.registered || a.start || '';
-    var db = b[dateField] || b.registered || b.start || '';
-    return db.localeCompare(da);
-  });
+function yearTag(dateStr) {
+  if (!dateStr) return '';
+  var year = dateStr.substring(0, 4);
+  if (!year || isNaN(parseInt(year))) return '';
+  var isCurrent = parseInt(year) >= 2024;
+  var color = isCurrent ? '#2e7d32' : '#888';
+  var bg = isCurrent ? '#e8f5e9' : '#f0f0f0';
+  var border = isCurrent ? '' : ' border:1px solid #ddd;';
+  return '<span style="display:inline-block;font-family:monospace;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:6px;vertical-align:middle;background:' + bg + ';color:' + color + ';' + border + '">' + year + '</span>';
 }
 
-var SHOW_MORE_LIMIT = 20;
+function showMP(name, constituency) {
+  var mp = MP_DATA[name];
+  if (!mp) { showError('No data found for ' + name + '.'); return; }
 
-function renderSection(title, count, innerHtml, sectionId) {
-  var html = '<div class="section">';
-  html += '<div class="section-header"><span class="section-title">' + title + '</span><span class="section-count">' + count + '</span></div>';
-  html += innerHtml;
-  html += '</div>';
-  return html;
-}
+  var totalDonations = 0;
+  for (var i = 0; i < mp.donations.length; i++) { totalDonations += mp.donations[i].value || 0; }
+  var totalGifts = 0;
+  for (var i = 0; i < mp.gifts.length; i++) { totalGifts += mp.gifts[i].value || 0; }
+  var totalAll = totalDonations + totalGifts;
 
-function wrapWithShowMore(entries, sectionId) {
-  if (entries.length <= SHOW_MORE_LIMIT) return entries.join('');
-  var visible = entries.slice(0, SHOW_MORE_LIMIT).join('');
-  var hidden = entries.slice(SHOW_MORE_LIMIT).join('');
-  var btn = '<div class="show-more-wrap"><button class="show-more-btn" onclick="toggleSection(\'' + sectionId + '\', this)">Show ' + (entries.length - SHOW_MORE_LIMIT) + ' more</button></div>';
-  return visible + '<div id="hidden-' + sectionId + '" style="display:none">' + hidden + '</div>' + btn;
+  var out = [];
+
+  // Header
+  out.push('<div class="mp-header">');
+  out.push('<p class="mp-label">Your MP' + (constituency ? ' &mdash; ' + esc(constituency) : '') + '</p>');
+  out.push('<h2 class="mp-name">' + esc(name) + '</h2>');
+  out.push('<p class="mp-meta">Register of Members\' Financial Interests &mdash; March 2026</p>');
+  out.push('</div>');
+
+  // Stats
+  out.push('<div class="stat-row">');
+  out.push('<div class="stat-pill"><div class="num highlight">' + (totalAll > 0 ? fmt(totalAll) : '&pound;0') + '</div><div class="lbl">Total declared value</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + mp.donations.length + '</div><div class="lbl">Donations received</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + mp.employment.length + '</div><div class="lbl">Outside jobs</div></div>');
+  out.push('<div class="stat-pill"><div class="num">' + mp.gifts.length + '</div><div class="lbl">Gifts &amp; hospitality</div></div>');
+  out.push('</div>');
+
+  // Donations section
+  var donations = mp.donations.slice().sort(function(a,b) { return (b.value||0) - (a.value||0); });
+  out.push('<div class="section">');
+  out.push('<div class="section-header"><span class="section-title">Donations received</span><span class="section-count">' + donations.length + '</span></div>');
+  if (!donations.length) {
+    out.push('<p class="empty-section">No donations declared in the current register.</p>');
+  } else {
+    donations.forEach(function(d) {
+      var donor = d.donor || extractDonor(d.summary || '') || 'Unknown donor';
+      out.push('<div class="entry">');
+      out.push('<div class="entry-main"><div class="entry-who">' + esc(donor) + yearTag(d.received) + '</div>');
+      out.push('<div class="entry-detail">' + esc(d.type || '') + (d.donor_status ? ' &middot; ' + esc(d.donor_status) : '') + '</div></div>');
+      out.push('<div><div class="entry-value">' + fmt(d.value) + '</div><div class="entry-date">' + fmtDate(d.received) + '</div></div>');
+      out.push('</div>');
+    });
+  }
+  out.push('</div>');
+
+  // Employment section
+  out.push('<div class="section">');
+  out.push('<div class="section-header"><span class="section-title">Outside employment &amp; earnings</span><span class="section-count">' + mp.employment.length + '</span></div>');
+  if (!mp.employment.length) {
+    out.push('<p class="empty-section">No outside employment declared.</p>');
+  } else {
+    mp.employment.forEach(function(e) {
+      out.push('<div class="entry">');
+      out.push('<div class="entry-main"><div class="entry-who">' + esc(e.payer || e.summary || '') + yearTag(e.registered) + '</div>');
+      out.push('<div class="entry-detail">' + esc(e.job || '') + '</div></div>');
+      out.push('<div><div class="entry-date">' + fmtDate(e.registered) + '</div></div>');
+      out.push('</div>');
+    });
+  }
+  out.push('</div>');
+
+  // Gifts
+  if (mp.gifts.length > 0) {
+    var gifts = mp.gifts.slice().sort(function(a,b) { return (b.value||0) - (a.value||0); });
+    out.push('<div class="section">');
+    out.push('<div class="section-header"><span class="section-title">Gifts &amp; hospitality</span><span class="section-count">' + gifts.length + '</span></div>');
+    gifts.forEach(function(g) {
+      var desc = g.description || '';
+      if (desc.length > 120) desc = desc.substring(0, 120) + '...';
+      var gDonor = g.donor || extractDonor(g.summary || g.description || '') || 'Unknown';
+      out.push('<div class="entry">');
+      out.push('<div class="entry-main"><div class="entry-who">' + esc(gDonor) + yearTag(g.received) + '</div>');
+      out.push('<div class="entry-detail">' + esc(desc) + '</div></div>');
+      out.push('<div><div class="entry-value">' + fmt(g.value) + '</div><div class="entry-date">' + fmtDate(g.received) + '</div></div>');
+      out.push('</div>');
+    });
+    out.push('</div>');
+  }
+
+  // Visits
+  if (mp.visits && mp.visits.length > 0) {
+    out.push('<div class="section">');
+    out.push('<div class="section-header"><span class="section-title">Overseas visits paid by others</span><span class="section-count">' + mp.visits.length + '</span></div>');
+    mp.visits.forEach(function(v) {
+      var loc = v.destination ? v.country + ' \u2014 ' + v.destination : (v.country || '');
+      var purpose = v.purpose || '';
+      if (purpose.length > 120) purpose = purpose.substring(0, 120) + '...';
+      var donors = (v.donors && v.donors.length) ? 'Paid by: ' + v.donors.join(', ') : '';
+      out.push('<div class="entry">');
+      out.push('<div class="entry-main"><div class="entry-who">' + esc(loc) + '</div>');
+      out.push('<div class="entry-detail">' + esc(purpose) + (donors ? ' &middot; ' + esc(donors) : '') + '</div></div>');
+      out.push('<div><div class="entry-date">' + fmtDate(v.start) + '</div></div>');
+      out.push('</div>');
+    });
+    out.push('</div>');
+  }
+
+  // Shareholdings
+  if (mp.shareholdings && mp.shareholdings.length > 0) {
+    out.push('<div class="section">');
+    out.push('<div class="section-header"><span class="section-title">Shareholdings</span><span class="section-count">' + mp.shareholdings.length + '</span></div>');
+    mp.shareholdings.forEach(function(s) {
+      out.push('<div class="entry">');
+      out.push('<div class="entry-main"><div class="entry-who">' + esc(s.company || s.summary || '') + '</div></div>');
+      out.push('<div><div class="entry-date">' + fmtDate(s.registered) + '</div></div>');
+      out.push('</div>');
+    });
+    out.push('</div>');
+  }
+
+  // Share bar
+  var shareText = 'My MP ' + name + ' declared ' + mp.donations.length + ' donation' + (mp.donations.length !== 1 ? 's' : '') + (totalDonations > 0 ? ' worth ' + fmt(totalDonations) : '') + ' and ' + mp.employment.length + ' outside job' + (mp.employment.length !== 1 ? 's' : '') + '. Find out who funds yours: whofundsthem.uk';
+
+  out.push('<div class="share-bar">');
+  out.push('<div class="share-text">Found something? Share it.</div>');
+  out.push('<div class="share-btns">');
+  out.push('<button class="share-btn" id="btnShareX">Share on X</button>');
+  out.push('<button class="share-btn" id="btnCopy">Copy link</button>');
+  out.push('</div></div>');
+  out.push('<p class="source-note">Data from the <a href="https://interests-api.parliament.uk" target="_blank">official Register of Members\' Financial Interests</a>. March 2026. Covers registered interests only &mdash; not Electoral Commission party donation records.</p>');
+
+  setResults(out.join(''));
+
+  document.getElementById('btnShareX').onclick = function() {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText), '_blank');
+  };
+
+  document.getElementById('btnCopy').onclick = function() {
+    var btn = this;
+    navigator.clipboard.writeText('https://whofundsthem.uk').then(function() {
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy link'; }, 2000);
+    });
+  };
+
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+</script>
+</body>
+</html>
